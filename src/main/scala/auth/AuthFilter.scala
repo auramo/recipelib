@@ -5,8 +5,9 @@ import org.scalatra.ScalatraFilter
 class AuthFilter extends ScalatraFilter {
   val consumer = new OpenIdConsumer
 
-  before() {
-    if (request.getRequestURL.toString.contains("/recipes") && request.getSession.getAttribute("authenticated-user") == null) {
+  before("/recipes/*") {
+    if (request.getSession.getAttribute("authenticated-user") == null) {
+      request.getSession.setAttribute("url-after-login", request.getRequestURL) // request.getQueryString also, but handle null and maybe add ? etc.
       consumer.authenticateGoogleUser(request, response)
     }
   }
@@ -16,17 +17,17 @@ class AuthFilter extends ScalatraFilter {
     println("consumer instance: " + consumer)
     val retval = consumer.verifyResponse(request)
     println("retval: " + retval)
-    val message = retval match {
-      case Right(authUser) => request.getSession.setAttribute("authenticated-user", authUser); "Login ok"
-      case Left(errMsg) => println(errMsg); errMsg
+    retval match {
+      case Right(authUser) => {
+        request.getSession.setAttribute("authenticated-user", authUser)
+        val redirectTo = request.getSession.getAttribute("url-after-login").toString
+        if (redirectTo != null) response.sendRedirect(redirectTo)
+        "Login ok"
+      }
+      case Left(errMsg) => {
+        println(errMsg)
+        "Login failed"
+      }
     }
-
-    println("message which I shuold put to the template if I knew how " + message)
-
-    <html>
-      <body>
-        <h1>openid login landing page</h1>
-      </body>
-    </html>
   }
 }
