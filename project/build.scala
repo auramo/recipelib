@@ -24,6 +24,7 @@ object RecipelibBuild extends Build {
       libraryDependencies ++= Seq(
         "org.scalatra" %% "scalatra" % ScalatraVersion,
         "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
+        "org.openid4java" % "openid4java" % "0.9.7",
         "org.scalatra" %% "scalatra-specs2" % ScalatraVersion % "test",
         "ch.qos.logback" % "logback-classic" % "1.0.6" % "runtime",
         "org.eclipse.jetty" % "jetty-webapp" % "8.1.8.v20121106" % "container",
