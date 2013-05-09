@@ -20,7 +20,7 @@ import org.openid4java.consumer.{VerificationResult, ConsumerManager}
 class SampleConsumer {
   val manager: ConsumerManager = new ConsumerManager
 
-  def authRequest(userSuppliedString: String, httpReq: HttpServletRequest, httpResp: HttpServletResponse): String = {
+  def authRequest(userSuppliedString: String, returnToUrl: String, httpReq: HttpServletRequest, httpResp: HttpServletResponse): String = {
     try {
       val returnToUrl = "http://localhost:8080/openid"
       val discoveries = manager.discover(userSuppliedString)
@@ -30,18 +30,8 @@ class SampleConsumer {
       val fetch = FetchRequest.createFetchRequest
       fetch.addAttribute("email", "http://schema.openid.net/contact/email", true)
       authReq.addExtension(fetch)
-      //if (!discovered.isVersion2) {
-        println("version 2")
-        httpResp.sendRedirect(authReq.getDestinationUrl(true))
-        return null
-      /*}
-      else {
-        println("This can't work since here's the nasty formredirection.jsp")
-        val dispatcher = httpReq.getServletContext.getRequestDispatcher("/formredirect")
-        httpReq.setAttribute("parameterMap", authReq.getParameterMap)
-        httpReq.setAttribute("destinationUrl", authReq.getDestinationUrl(false))
-        dispatcher.forward(httpReq, httpResp)
-      } */
+      httpResp.sendRedirect(authReq.getDestinationUrl(true))
+      return null
     }
     catch {
       case e: Exception => {
