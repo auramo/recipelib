@@ -22,7 +22,6 @@ class SampleConsumer {
 
   def authRequest(userSuppliedString: String, returnToUrl: String, httpReq: HttpServletRequest, httpResp: HttpServletResponse): String = {
     try {
-      val returnToUrl = "http://localhost:8080/openid"
       val discoveries = manager.discover(userSuppliedString)
       val discovered = manager.associate(discoveries)
       httpReq.getSession.setAttribute("openid-disc", discovered)
