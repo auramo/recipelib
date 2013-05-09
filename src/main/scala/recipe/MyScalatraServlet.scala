@@ -2,10 +2,11 @@ package recipe
 
 import org.scalatra._
 import scalate.ScalateSupport
-import auth.SampleConsumer
+import auth.OpenIdConsumer
+import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
 class MyScalatraServlet extends RecipelibStack {
-  val consumer = new SampleConsumer
+  val consumer = new OpenIdConsumer
 
   get("/") {
     println("pow")
@@ -35,18 +36,9 @@ class MyScalatraServlet extends RecipelibStack {
   }
 
   get("/authenticate") {
-    println("before authenticate")
-    authenticate
-    println("after authenticate")
+    println("before authenticateGoogleUser")
+    consumer.authenticateGoogleUser(request, response)
+    println("after authenticateGoogleUser")
   }
-
-  def authenticate {
-    println("consumer instance in authenticate: ")
-    println(consumer)
-    val googleOpenIdRequestString = "https://www.google.com/accounts/o8/id"
-    val returnToUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/openid"
-    consumer.authRequest(googleOpenIdRequestString, returnToUrl, request, response)
-  }
-
 
 }
