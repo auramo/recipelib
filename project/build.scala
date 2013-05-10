@@ -4,6 +4,7 @@ import org.scalatra.sbt._
 import org.scalatra.sbt.PluginKeys._
 import com.mojolly.scalate.ScalatePlugin._
 import ScalateKeys._
+import com.typesafe.sbt.SbtStartScript
 
 object RecipelibBuild extends Build {
   val Organization = "auramo"
@@ -15,7 +16,7 @@ object RecipelibBuild extends Build {
   lazy val project = Project (
     "recipelib",
     file("."),
-    settings = Defaults.defaultSettings ++ ScalatraPlugin.scalatraWithJRebel ++ scalateSettings ++ Seq(
+    settings = Defaults.defaultSettings ++ ScalatraPlugin.scalatraWithJRebel ++ scalateSettings ++ SbtStartScript.startScriptForClassesSettings ++ Seq(
       organization := Organization,
       name := Name,
       version := Version,
@@ -45,3 +46,4 @@ object RecipelibBuild extends Build {
     )
   )
 }
+
