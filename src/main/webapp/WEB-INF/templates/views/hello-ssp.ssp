@@ -19,6 +19,7 @@
                     console.log(status)
                     console.log("Response contents")
                     console.log(jqXHR.responseText)
+                    document.location.reload();
                 }
             });
         }
