@@ -1,0 +1,4 @@
+<%@ val foo: String %>
+<%@ val bar: String %>
+<p>Foo is <%= foo %></p>
+<p>Bar is <%= bar %></p>

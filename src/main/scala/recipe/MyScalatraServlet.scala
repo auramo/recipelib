@@ -7,6 +7,11 @@ import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
 class MyScalatraServlet extends RecipelibStack {
 
+  get("/ssptest") {
+    contentType="text/html"
+    ssp("hello-ssp.ssp", "foo" -> "uno", "bar" -> "dos")
+  }
+
   get("/") {
     <html>
       <body>

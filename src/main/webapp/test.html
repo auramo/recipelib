@@ -1,0 +1,32 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Testing</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script languange="javascript">
+        $(document).ready(function() {
+            //alert("hello")
+
+            $.ajax({
+                url: "/recipes/",
+                type: "get",
+                success: function(data){
+                    console.log("success")
+                    console.log("data")
+                    console.log(data)
+                },
+                error:function(jqXHR, status, msg){
+                    console.log("Eror occurred. Status:")
+                    console.log(jqXHR.status)
+                    console.log("Response contents")
+                    console.log(jqXHR.responseText)
+                }
+            });
+
+        });
+    </script>
+</head>
+<body>
+    Hello
+</body>
+</html>
