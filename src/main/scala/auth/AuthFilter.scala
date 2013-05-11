@@ -12,6 +12,13 @@ class AuthFilter extends ScalatraFilter {
     }
   }
 
+  before("/recipeapi/*") {
+    println("###AuthFilter recipeapi filter###")
+    if (request.getSession.getAttribute("authenticated-user") == null) {
+      halt(401, "Not authencitated")
+    }
+  }
+
   get("/openid") {
     println("to return page")
     println("consumer instance: " + consumer)

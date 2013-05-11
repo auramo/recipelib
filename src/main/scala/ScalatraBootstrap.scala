@@ -7,5 +7,6 @@ class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
     context.mount(new AuthFilter, "/*")
     context.mount(new MyScalatraServlet, "/recipes/*")
+    context.mount(new RecipeApiServlet, "/recipeapi/*")
   }
 }
