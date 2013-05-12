@@ -1,0 +1,23 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Testing</title>
+    <script src="js/lz-string.js"></script>
+    <script languange="javascript">
+        var string = "This is my compression test.";
+        console.log("Size of sample is: " + string.length);
+        var compressed = LZString.compress(string);
+        var base64compressed = atob(compressed)
+        console.log("Size of compressed sample is: " + compressed.length);
+        console.log("compressed sample: ");
+        console.log(compressed)
+        console.log("base64 compressed : ");
+        console.log(base64compressed)
+        string = LZString.decompress(compressed);
+        console.log("Sample is: " + string);
+    </script>
+</head>
+<body>
+    Hello, check the console
+</body>
+</html>
