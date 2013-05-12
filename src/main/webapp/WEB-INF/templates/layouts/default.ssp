@@ -1,9 +1,2 @@
 <%@ val body: String %>
-<html>
-<head>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-</head>
-<body>
-  <%= unescape(body) %>
-</body>
-</html>
+<%= unescape(body) %>

@@ -9,6 +9,7 @@ class AuthFilter extends ScalatraFilter {
     if (request.getSession.getAttribute("authenticated-user") == null) {
       request.getSession.setAttribute("url-after-login", request.getRequestURL) // request.getQueryString also, but handle null and maybe add ? etc.
       consumer.authenticateGoogleUser(request, response)
+      halt(401, "Checking authentication")
     }
   }
 
