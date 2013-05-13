@@ -2,7 +2,11 @@ var recipeService = (function() {
     return {
         getRecipes: function(callback) {
             function fetchRecipeCallback(data) {
-                callback(JSON.parse(data));
+                console.log("before parsing")
+                var parsed = JSON.parse(data)
+                console.log("parsed")
+                console.log(parsed)
+                callback(parsed);
             }
             ajaxGet("" , fetchRecipeCallback, fetchRecipeFailureCallback)
         }
