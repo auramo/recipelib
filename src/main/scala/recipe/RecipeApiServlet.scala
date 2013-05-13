@@ -5,6 +5,6 @@ class RecipeApiServlet extends RecipelibStack {
     """{"data": 5}"""
   }
   get("/") {
-    """{"root": true}"""
+    """{"recipes": ["a", "b"]}"""
   }
 }

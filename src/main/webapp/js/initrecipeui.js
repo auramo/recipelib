@@ -1,8 +1,12 @@
 $(document).ready(function() {
-    recipes = recipeService.getRecipes();
-    if (!_.isEmpty(recipes)) {
-        $('.new-recipe').show()
-    } else {
-        $('.new-recipe').hide()
-    }
+    recipeService.getRecipes(function(result) {
+        if (_.isEmpty(result.recipes)) {
+            console.log(result)
+            console.log("is empty")
+            $('.new-recipe').show()
+        } else {
+            console.log("not empty")
+            $('.new-recipe').hide()
+        }
+    });
 });
