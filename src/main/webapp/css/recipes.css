@@ -2,6 +2,6 @@
 .navi ul { list-style-type: none; padding:0; margin:0; }
 .content {float: left; width: 80%; }
 .recipe-content {width: 80%; height: 80%; }
-.new-recipe { display: none; }
+.new-recipe { }
 .recipe-list { display: none; }
 .recipe-list ul { list-style-type: none; padding:0; margin:0; }
