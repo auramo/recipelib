@@ -6,6 +6,7 @@
     <script src="/js/errorservice.js"></script>
     <script src="/js/recipeservice.js"></script>
     <script src="/js/recipeuicontroller.js"></script>
+    <script type="text/javascript" src="/js/nicEdit.js"></script>
     <script src="/js/initrecipeui.js"></script>
 </head>
 <body>
@@ -26,18 +27,6 @@
         </ul>
     </div>
     <div class="new-recipe">
-        <script type="text/javascript" src="/js/nicEdit.js"></script>
-        <script type="text/javascript">
-            bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-            function printContentInJson() {
-                console.log("plaa");
-                var content = nicEditors.findEditor('recipe-content').getContent();
-                //console.log(content)
-                var objectWithHtmlContent = {otherField: "Hi there", htmlContent: content}
-                stringified = JSON.stringify(objectWithHtmlContent)
-                console.log(stringified)
-            }
-        </script>
         <div class="recipe-data-row"><label>Nimi:</label><input type="text"></input></div>
         <div class="recipe-data-row"><label>Tagit:</label><input type="text"></input></div>
         <textarea name="recipe-content" id="recipe-content" class="recipe-content">
