@@ -1,22 +1,21 @@
 var recipeUiController = (function() {
-    function initUi() {
-        recipeService.getRecipes(function(result) {
-            console.log(result)
-            if (_.isEmpty(result.recipes)) {
-                $('.new-recipe').show()
-                $('.recipe-list').hide()
-            } else {
-                $('.new-recipe').hide()
-                $('.recipe-list').show()
-                $('.recipe-list ul').html(getRecipeListHtml(result.recipes))
-            }
-        });
-        function getRecipeListHtml(recipes) {
+
+    function switchToNewRecipeView() {
+        $('.new-recipe').show()
+        $('.recipe-list').hide()
+    }
+
+    function switchToRecipeListView(recipes) {
+        function getRecipeListHtml() {
             return _(recipes).map(function(recipe) { return "<ul>" + recipe.name + "</ul>"; }).reduce(function (r1, r2) { return r1 + r2 })
         }
+        $('.new-recipe').hide()
+        $('.recipe-list').show()
+        $('.recipe-list ul').html(getRecipeListHtml())
     }
 
     return {
-        initUi: initUi
+        switchToNewRecipeView: switchToNewRecipeView,
+        switchToRecipeListView: switchToRecipeListView
     }
 })();
