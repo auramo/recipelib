@@ -16,11 +16,13 @@ var recipeUiController = (function() {
 
     function saveRecipe() {
         console.log("saverecipe")
-        var content = nicEditors.findEditor('recipe-content').getContent();
-        var objectWithHtmlContent = {otherField: "Hi there", htmlContent: content}
-        stringified = JSON.stringify(objectWithHtmlContent)
-        console.log(stringified)
-        //recipeService.createNewRecipe()
+
+        var recipeName = $('input[name=recipe-name]').val()
+        var recipeTags = $('input[name=recipe-tags]').val()
+
+        var recipeContent = nicEditors.findEditor('recipe-content').getContent();
+        var recipeObject = { name: recipeName, tags: recipeTags, content: recipeContent }
+        recipeService.createNewRecipe(recipeObject)
     }
 
     return {

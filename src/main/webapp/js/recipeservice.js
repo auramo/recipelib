@@ -9,6 +9,11 @@ var recipeService = (function() {
                 callback(parsed);
             }
             ajaxGet("" , fetchRecipeCallback, fetchRecipeFailureCallback)
+        },
+        createNewRecipe: function(recipe) {
+            jsonRecipeObject = JSON.stringify(recipe)
+            console.log(jsonRecipeObject)
+            //Do ajax post
         }
     }
 
