@@ -14,8 +14,19 @@ var recipeUiController = (function() {
         $('.recipe-list ul').html(getRecipeListHtml())
     }
 
+    function saveRecipe() {
+        console.log("saverecipe")
+        var content = nicEditors.findEditor('recipe-content').getContent();
+        var objectWithHtmlContent = {otherField: "Hi there", htmlContent: content}
+        stringified = JSON.stringify(objectWithHtmlContent)
+        console.log(stringified)
+        //recipeService.createNewRecipe()
+    }
+
     return {
         switchToNewRecipeView: switchToNewRecipeView,
-        switchToRecipeListView: switchToRecipeListView
+        switchToRecipeListView: switchToRecipeListView,
+        saveRecipe: saveRecipe
+
     }
 })();
