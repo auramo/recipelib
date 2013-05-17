@@ -22,7 +22,7 @@ var recipeUiController = (function() {
 
         var recipeContent = nicEditors.findEditor('recipe-content').getContent();
         var recipeObject = { name: recipeName, tags: recipeTags, content: recipeContent }
-        recipeService.createNewRecipe(recipeObject)
+        recipeService.createNewRecipe(recipeObject, function() { console.log("Successfully submitted") })
     }
 
     return {

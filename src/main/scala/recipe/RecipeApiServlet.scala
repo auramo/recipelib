@@ -12,4 +12,11 @@ class RecipeApiServlet extends RecipelibStack {
                    ]}
     """
   }
+
+  post("/") {
+    println("Got this:")
+    println(request)
+    println(request.body)
+    """{"ok": true}"""
+  }
 }
