@@ -1,8 +1,40 @@
 var recipeUiController = (function() {
 
+    function recipeNameField() {
+        return $('input[name=recipe-name]')
+    }
+
+    function recipeTagsField() {
+        return $('input[name=recipe-tags]')
+    }
+
+    function recipeContentField() {
+        return $('.nicEdit-main')
+    }
+
+    function recipientContentValue() {
+        function value() {
+            return nicEditors.findEditor('recipe-content').getContent()
+        }
+        return recipeContentField().asEventStream('keyup').map(value).log().toProperty(value())
+    }
+
+    function getRecipeContent() {
+        return nicEditors.findEditor('recipe-content').getContent()
+    }
+
     function switchToNewRecipeView() {
         $('.new-recipe').show()
         $('.recipe-list').hide()
+        initValidators()
+    }
+
+    function initValidators() {
+        function nonEmpty(x) { return x.length > 0 && x !== '<br>' }
+        recipeNameEntered = Bacon.UI.textFieldValue(recipeNameField()).map(nonEmpty)
+        recipeContentEntered = recipientContentValue().map(nonEmpty)
+        buttonEnabled = recipeNameEntered.and(recipeContentEntered)
+        buttonEnabled.not().onValue($(".save-button"), "attr", "disabled")
     }
 
     function switchToRecipeListView(recipes) {
@@ -15,12 +47,9 @@ var recipeUiController = (function() {
     }
 
     function saveRecipe() {
-        console.log("saverecipe")
-
-        var recipeName = $('input[name=recipe-name]').val()
-        var recipeTags = $('input[name=recipe-tags]').val()
-
-        var recipeContent = nicEditors.findEditor('recipe-content').getContent();
+        var recipeName = recipeNameField().val()
+        var recipeTags = recipeTagsField().val()
+        var recipeContent = getRecipeContent();
         var recipeObject = { name: recipeName, tags: recipeTags, content: recipeContent }
         recipeService.createNewRecipe(recipeObject, function() { console.log("Successfully submitted") })
     }
@@ -29,6 +58,5 @@ var recipeUiController = (function() {
         switchToNewRecipeView: switchToNewRecipeView,
         switchToRecipeListView: switchToRecipeListView,
         saveRecipe: saveRecipe
-
     }
 })();
