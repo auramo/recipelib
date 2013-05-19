@@ -19,18 +19,21 @@ var recipeService = (function() {
         },
         createNewRecipe: function(recipe, successCallback) {
             var jsonRecipeObject = JSON.stringify(recipe)
-            console.log("sending this:")
+            ajaxSendData("POST", "", jsonRecipeObject, successCallback, postRecipeFailureCallback)
+        },
+        saveRecipe: function(recipe, successCallback) {
+            var jsonRecipeObject = JSON.stringify(recipe)
+            console.log("savingthis:")
             console.log(jsonRecipeObject)
-            //Do ajax post
-            ajaxPost("", jsonRecipeObject, successCallback, postRecipeFailureCallback)
-            //ajaxPost("", recipe, successCallback, postRecipeFailureCallback)
+            ajaxSendData("PUT", recipe.id, jsonRecipeObject, successCallback, postRecipeFailureCallback)
         }
+
     }
 
-    function ajaxPost(path, data, successCallback, failureCallback) {
+    function ajaxSendData(method, path, data, successCallback, failureCallback) {
         $.ajax({
             url: "/recipeapi/" + path,
-            type: "POST",
+            type: method,
             data: data,
             contentType: 'application/json',
             dataType: "json",

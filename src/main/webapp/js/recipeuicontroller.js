@@ -72,12 +72,19 @@ var recipeUiController = (function() {
     }
 
     function saveRecipe() {
+        var recipeId = recipeIdField().val()
         var recipeName = recipeNameField().val()
         var recipeTags = recipeTagsField().val()
         var originalAddress = recipeOriginalAddressField().val()
         var recipeContent = getRecipeContent();
         var recipeObject = { name: recipeName, tags: recipeTags, content: recipeContent, originalAddress: originalAddress }
-        recipeService.createNewRecipe(recipeObject, function() { console.log("Successfully submitted") })
+        if (_.isEmpty(recipeId)) {
+            recipeService.createNewRecipe(recipeObject, function() { console.log("Successfully submitted") })
+        }
+        else {
+            recipeObject.id = recipeId
+            recipeService.saveRecipe(recipeObject, function() { console.log("Successfully submitted") })
+        }
     }
 
     return {

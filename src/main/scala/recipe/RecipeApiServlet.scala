@@ -22,7 +22,14 @@ class RecipeApiServlet extends RecipelibStack {
   }
 
   post("/") {
-    println("Got this:")
+    println("Post got this:")
+    println(request)
+    println(request.body)
+    """{"ok": true}"""
+  }
+
+  put("/:id") {
+    println("PUT got this:")
     println(request)
     println(request.body)
     """{"ok": true}"""
