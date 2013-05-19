@@ -30,8 +30,15 @@ class RecipeApiServlet extends RecipelibStack {
 
   put("/:id") {
     println("PUT got this:")
-    println(request)
+    val id = params("id")
+    println("PUT request with id: " + id)
     println(request.body)
+    """{"ok": true}"""
+  }
+
+  delete("/:id") {
+    val id = params("id")
+    println("DELETE request with id: " + id)
     """{"ok": true}"""
   }
 }

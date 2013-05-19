@@ -26,8 +26,11 @@ var recipeService = (function() {
             console.log("savingthis:")
             console.log(jsonRecipeObject)
             ajaxSendData("PUT", recipe.id, jsonRecipeObject, successCallback, postRecipeFailureCallback)
+        },
+        deleteRecipe: function(recipeId, successCallback) {
+            console.log("deleting this:")
+            ajaxSendData("DELETE", recipeId, "", successCallback, postRecipeFailureCallback)
         }
-
     }
 
     function ajaxSendData(method, path, data, successCallback, failureCallback) {

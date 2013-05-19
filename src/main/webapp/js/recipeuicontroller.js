@@ -58,6 +58,17 @@ var recipeUiController = (function() {
         buttonEnabled.not().onValue($(".save-button"), "attr", "disabled")
     }
 
+    function start() {
+        recipeService.getRecipes(function(result) {
+            console.log(result)
+            if (_.isEmpty(result.recipes)) {
+                switchToEditRecipeView()
+            } else {
+                switchToRecipeListView(result.recipes)
+            }
+        });
+    }
+
     function switchToRecipeListView(recipes) {
         function recipeListRow(recipe) {
             return '<ul><a href="#" onclick="recipeUiController.switchToEditRecipeView(' + recipe.id + ')">' + recipe.name + '</a></ul>';
@@ -79,11 +90,18 @@ var recipeUiController = (function() {
         var recipeContent = getRecipeContent();
         var recipeObject = { name: recipeName, tags: recipeTags, content: recipeContent, originalAddress: originalAddress }
         if (_.isEmpty(recipeId)) {
-            recipeService.createNewRecipe(recipeObject, function() { console.log("Successfully submitted") })
+            recipeService.createNewRecipe(recipeObject, function() { console.log("Successfully created") })
         }
         else {
             recipeObject.id = recipeId
-            recipeService.saveRecipe(recipeObject, function() { console.log("Successfully submitted") })
+            recipeService.saveRecipe(recipeObject, function() { console.log("Successfully saved") })
+        }
+    }
+
+    function deleteRecipe() {
+        var recipeId = recipeIdField().val()
+        if (!_.isEmpty(recipeId)) {
+            recipeService.deleteRecipe(recipeId, function() { console.log("Successfully deleted"); start() })
         }
     }
 
@@ -91,6 +109,8 @@ var recipeUiController = (function() {
         switchToEditRecipeView: switchToEditRecipeView,
         switchToRecipeListView: switchToRecipeListView,
         saveRecipe: saveRecipe,
-        initValidators: initValidators
+        deleteRecipe: deleteRecipe,
+        initValidators: initValidators,
+        start: start
     }
 })();
