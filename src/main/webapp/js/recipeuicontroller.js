@@ -8,6 +8,10 @@ var recipeUiController = (function() {
         return $('input[name=recipe-tags]')
     }
 
+    function recipeOriginalAddressField() {
+        return $('input[name=original-address]')
+    }
+
     function recipeContentField() {
         return $('.nicEdit-main')
     }
@@ -26,6 +30,10 @@ var recipeUiController = (function() {
     function switchToEditRecipeView(recipeId) {
         if (recipeId) {
             console.log("Switching to edit view with id: " + recipeId)
+            recipeService.getRecipe(recipeId, function(recipe) {
+                console.log("Got recipe")
+                console.log(recipe)
+            })
         }
         $('.new-recipe').show()
         $('.recipe-list').hide()
@@ -41,7 +49,7 @@ var recipeUiController = (function() {
 
     function switchToRecipeListView(recipes) {
         function recipeListRow(recipe) {
-            return '<ul><a href="#" onclick="recipeUiController.switchToEditRecipeView()">' + recipe.name + '</a></ul>';
+            return '<ul><a href="#" onclick="recipeUiController.switchToEditRecipeView(' + recipe.id + ')">' + recipe.name + '</a></ul>';
         }
 
         function getRecipeListHtml() {
@@ -55,8 +63,9 @@ var recipeUiController = (function() {
     function saveRecipe() {
         var recipeName = recipeNameField().val()
         var recipeTags = recipeTagsField().val()
+        var originalAddress = recipeOriginalAddressField().val()
         var recipeContent = getRecipeContent();
-        var recipeObject = { name: recipeName, tags: recipeTags, content: recipeContent }
+        var recipeObject = { name: recipeName, tags: recipeTags, content: recipeContent, originalAddress: originalAddress }
         recipeService.createNewRecipe(recipeObject, function() { console.log("Successfully submitted") })
     }
 

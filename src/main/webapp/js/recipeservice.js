@@ -10,6 +10,13 @@ var recipeService = (function() {
             }
             ajaxGet("" , fetchRecipeCallback, fetchRecipeFailureCallback)
         },
+        getRecipe: function(id, callback) {
+            function fetchRecipeDetailsCallback(data) {
+                var parsed = JSON.parse(data)
+                callback(parsed);
+            }
+            ajaxGet(id , fetchRecipeDetailsCallback, fetchRecipeFailureCallback)
+        },
         createNewRecipe: function(recipe, successCallback) {
             var jsonRecipeObject = JSON.stringify(recipe)
             console.log("sending this:")

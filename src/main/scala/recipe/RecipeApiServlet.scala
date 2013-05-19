@@ -13,6 +13,14 @@ class RecipeApiServlet extends RecipelibStack {
     """
   }
 
+  get("/:id") {
+    val id = params("id")
+    println("Got request with id: " + id)
+    """
+      {"id": "1", "name": "Maksalaatikko", "tags": ["loota", "perinneruoka"], "content":"<p>maksat uuniin</p>"}
+    """
+  }
+
   post("/") {
     println("Got this:")
     println(request)
