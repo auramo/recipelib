@@ -23,37 +23,32 @@ var recipeUiController = (function() {
         return nicEditors.findEditor('recipe-content').getContent()
     }
 
-    function switchToNewRecipeView(fade) {
-        //$('.new-recipe').show()
-        if (fade) {
-            $('.new-recipe').fadeIn()
-            $('.recipe-list').fadeOut()
-        } else {
-            $('.new-recipe').show()
-            $('.recipe-list').hide()
+    function switchToEditRecipeView(recipeId) {
+        if (recipeId) {
+            console.log("Switching to edit view with id: " + recipeId)
         }
-        //initValidators()
+        $('.new-recipe').show()
+        $('.recipe-list').hide()
     }
 
     function initValidators() {
         function nonEmpty(x) { return x.length > 0 && x !== '<br>' }
-        recipeNameEntered = Bacon.UI.textFieldValue(recipeNameField()).map(nonEmpty)
-        recipeContentEntered = recipientContentValue().map(nonEmpty)
-        buttonEnabled = recipeNameEntered.and(recipeContentEntered)
+        var recipeNameEntered = Bacon.UI.textFieldValue(recipeNameField()).map(nonEmpty)
+        var recipeContentEntered = recipientContentValue().map(nonEmpty)
+        var buttonEnabled = recipeNameEntered.and(recipeContentEntered)
         buttonEnabled.not().onValue($(".save-button"), "attr", "disabled")
     }
 
-    function switchToRecipeListView(recipes, fade) {
+    function switchToRecipeListView(recipes) {
+        function recipeListRow(recipe) {
+            return '<ul><a href="#" onclick="recipeUiController.switchToEditRecipeView()">' + recipe.name + '</a></ul>';
+        }
+
         function getRecipeListHtml() {
-            return _(recipes).map(function(recipe) { return "<ul>" + recipe.name + "</ul>"; }).reduce(function (r1, r2) { return r1 + r2 })
+            return _(recipes).map(function(recipe) { return recipeListRow(recipe); }).reduce(function (r1, r2) { return r1 + r2 })
         }
-        if (fade) {
-            $('.new-recipe').fadeOut()
-            $('.recipe-list').fadeIn()
-        } else {
-            $('.new-recipe').hide()
-            $('.recipe-list').show()
-        }
+        $('.new-recipe').hide()
+        $('.recipe-list').show()
         $('.recipe-list ul').html(getRecipeListHtml())
     }
 
@@ -66,7 +61,7 @@ var recipeUiController = (function() {
     }
 
     return {
-        switchToNewRecipeView: switchToNewRecipeView,
+        switchToEditRecipeView: switchToEditRecipeView,
         switchToRecipeListView: switchToRecipeListView,
         saveRecipe: saveRecipe,
         initValidators: initValidators
