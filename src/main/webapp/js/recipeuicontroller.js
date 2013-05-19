@@ -31,22 +31,20 @@ var recipeUiController = (function() {
         return recipeContentField().getContent()
     }
 
+    function fillEditRecipeFields(recipe) {
+        recipeIdField().val(recipe.id)
+        recipeNameField().val(recipe.name)
+        recipeTagsField().val(recipe.tags)
+        recipeOriginalAddressField().val(recipe.originalAddress)
+        recipeContentField().setContent(recipe.content)
+    }
+
     function switchToEditRecipeView(recipeId) {
         if (recipeId) {
             console.log("Switching to edit view with id: " + recipeId)
-            recipeService.getRecipe(recipeId, function(recipe) {
-                console.log("Got recipe")
-                console.log(recipe)
-                recipeIdField().val(recipeId)
-                recipeNameField().val(recipe.name)
-                recipeTagsField().val(recipe.tags)
-                recipeOriginalAddressField().val(recipe.originalAddress)
-
-                console.log("recipe content in callback")
-                console.log(recipe.content)
-
-                recipeContentField().setContent(recipe.content)
-            })
+            recipeService.getRecipe(recipeId, fillEditRecipeFields)
+        } else {
+            fillEditRecipeFields({name: "", tags: "", originalAddress: "", content: ""})
         }
         $('.new-recipe').show()
         $('.recipe-list').hide()

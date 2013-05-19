@@ -6,9 +6,9 @@ class RecipeApiServlet extends RecipelibStack {
   }
   get("/") {
     """
-      {"recipes": [{"id": "1", "name": "Maksalaatikko", "tags": ["loota", "perinneruoka"], "content":"maksat uuniin"},
-                   {"id": "2", "name": "Lihapullat", "tags": ["perus"], "content":"<p>jatketta, pyöritä ja laita vuokaan uuniin</p>"},
-                   {"id": "3", "name": "Kalapuikot", "tags": ["eines", "paha"], "content":"<p>pellille vaan</p>"}
+      {"recipes": [{"id": "1", "name": "Maksalaatikko", "tags": ["loota", "perinneruoka"]},
+                   {"id": "2", "name": "Lihapullat", "tags": ["perus"]},
+                   {"id": "3", "name": "Kalapuikot", "tags": ["eines", "paha"]}
                    ]}
     """
   }
@@ -17,7 +17,7 @@ class RecipeApiServlet extends RecipelibStack {
     val id = params("id")
     println("Got request with id: " + id)
     """
-      {"id": "1", "name": "Maksalaatikko", "tags": ["loota", "perinneruoka"], "content":"maksat uuniin"}
+      {"id": "1", "name": "Maksalaatikko", "tags": ["loota", "perinneruoka"], "content":"maksat uuniin", "originalAddress": "http://huu.haa" }
     """
   }
 
