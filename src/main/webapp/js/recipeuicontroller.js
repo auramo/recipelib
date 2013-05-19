@@ -1,5 +1,9 @@
 var recipeUiController = (function() {
 
+    function recipeIdField() {
+        return $('input[name="recipe-id"]')
+    }
+
     function recipeNameField() {
         return $('input[name=recipe-name]')
     }
@@ -13,18 +17,18 @@ var recipeUiController = (function() {
     }
 
     function recipeContentField() {
-        return $('.nicEdit-main')
+        return nicEditors.findEditor('recipe-content')
     }
 
     function recipientContentValue() {
         function value() {
             return nicEditors.findEditor('recipe-content').getContent()
         }
-        return recipeContentField().asEventStream('keyup').map(value).log().toProperty(value())
+        return $('.nicEdit-main').asEventStream('keyup').map(value).log().toProperty(value())
     }
 
     function getRecipeContent() {
-        return nicEditors.findEditor('recipe-content').getContent()
+        return recipeContentField().getContent()
     }
 
     function switchToEditRecipeView(recipeId) {
@@ -33,6 +37,15 @@ var recipeUiController = (function() {
             recipeService.getRecipe(recipeId, function(recipe) {
                 console.log("Got recipe")
                 console.log(recipe)
+                recipeIdField().val(recipeId)
+                recipeNameField().val(recipe.name)
+                recipeTagsField().val(recipe.tags)
+                recipeOriginalAddressField().val(recipe.originalAddress)
+
+                console.log("recipe content in callback")
+                console.log(recipe.content)
+
+                recipeContentField().setContent(recipe.content)
             })
         }
         $('.new-recipe').show()
