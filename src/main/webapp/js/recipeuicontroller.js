@@ -23,10 +23,16 @@ var recipeUiController = (function() {
         return nicEditors.findEditor('recipe-content').getContent()
     }
 
-    function switchToNewRecipeView() {
-        $('.new-recipe').show()
-        $('.recipe-list').hide()
-        initValidators()
+    function switchToNewRecipeView(fade) {
+        //$('.new-recipe').show()
+        if (fade) {
+            $('.new-recipe').fadeIn()
+            $('.recipe-list').fadeOut()
+        } else {
+            $('.new-recipe').show()
+            $('.recipe-list').hide()
+        }
+        //initValidators()
     }
 
     function initValidators() {
@@ -37,12 +43,17 @@ var recipeUiController = (function() {
         buttonEnabled.not().onValue($(".save-button"), "attr", "disabled")
     }
 
-    function switchToRecipeListView(recipes) {
+    function switchToRecipeListView(recipes, fade) {
         function getRecipeListHtml() {
             return _(recipes).map(function(recipe) { return "<ul>" + recipe.name + "</ul>"; }).reduce(function (r1, r2) { return r1 + r2 })
         }
-        $('.new-recipe').hide()
-        $('.recipe-list').show()
+        if (fade) {
+            $('.new-recipe').fadeOut()
+            $('.recipe-list').fadeIn()
+        } else {
+            $('.new-recipe').hide()
+            $('.recipe-list').show()
+        }
         $('.recipe-list ul').html(getRecipeListHtml())
     }
 
@@ -57,6 +68,7 @@ var recipeUiController = (function() {
     return {
         switchToNewRecipeView: switchToNewRecipeView,
         switchToRecipeListView: switchToRecipeListView,
-        saveRecipe: saveRecipe
+        saveRecipe: saveRecipe,
+        initValidators: initValidators
     }
 })();

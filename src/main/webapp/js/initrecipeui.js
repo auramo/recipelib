@@ -1,5 +1,6 @@
 $(document).ready(function() {
     nicEditors.allTextAreas()
+    recipeUiController.initValidators()
     recipeService.getRecipes(function(result) {
         console.log(result)
         if (_.isEmpty(result.recipes)) {
