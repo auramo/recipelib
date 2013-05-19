@@ -16,7 +16,7 @@
     <img src="/images/pipo_saltcellar.png" width="53" height="80">
     <ul>
         <li><button onclick="recipeUiController.switchToEditRecipeView()">Uusi</button></li>
-        <li><button>Poista</button></li>
+        <li><button>Kaikki reseptit</button></li>
     </ul>
 </div>
 
@@ -24,8 +24,6 @@
 <div class="content">
     <div class="recipe-list">
         <ul>
-            <li>Stuff 1</li>
-            <li>Stuff 2</li>
         </ul>
     </div>
     <div class="new-recipe">
@@ -37,6 +35,7 @@
         </div>
         <textarea name="recipe-content" id="recipe-content" class="recipe-content"></textarea>
         <button class="save-button" onclick="recipeUiController.saveRecipe()" value="Tallenna">Tallenna</button>
+        <button class="save-button" onclick="alert('implement')" value="Tallenna">Poista</button>
     </div>
 </div>
 </body>
