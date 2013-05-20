@@ -63,9 +63,11 @@ var recipeUiController = (function() {
     }
 
     function search(searchString) {
-        var found = _(cachedRecipes).filter(function(recipe) { return _.contains(recipe.name.toLowerCase(), searchString.toLowerCase()) }).map(function(filtered) { return "recipe-" + filtered.id }).value()
-        $('.recipe-list-row').filter(function() { return !_.contains(found, this.id) }).hide()
-        $('.recipe-list-row').filter(function() { return _.contains(found, this.id) }).show()
+        function matchRecipe(recipe) { return _.contains(recipe.name.toLowerCase(), searchString.toLowerCase()) }
+        var found = _(cachedRecipes).filter(matchRecipe).map(function(filtered) { return "recipe-" + filtered.id }).value()
+        var rows = $('.recipe-list-row')
+        rows.filter(function() { return !_.contains(found, this.id) }).hide()
+        rows.filter(function() { return _.contains(found, this.id) }).show()
     }
 
     function start() {
