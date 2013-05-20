@@ -1,5 +1,7 @@
 var recipeUiController = (function() {
 
+    var cachedRecipes = []
+
     function recipeIdField() {
         return $('input[name="recipe-id"]')
     }
@@ -50,17 +52,24 @@ var recipeUiController = (function() {
         $('.recipe-list').hide()
     }
 
-    function initValidators() {
+    function initEvents() {
         function nonEmpty(x) { return x.length > 0 && x !== '<br>' }
         var recipeNameEntered = Bacon.UI.textFieldValue(recipeNameField()).map(nonEmpty)
         var recipeContentEntered = recipientContentValue().map(nonEmpty)
         var buttonEnabled = recipeNameEntered.and(recipeContentEntered)
         buttonEnabled.not().onValue($(".save-button"), "attr", "disabled")
+
+        Bacon.UI.textFieldValue($('.search-recipes')).debounce(500).onValue(search)
+    }
+
+    function search(value) {
+        console.log(value)
     }
 
     function start() {
         recipeService.getRecipes(function(result) {
             console.log(result)
+            cachedRecipes = result.recipes
             if (_.isEmpty(result.recipes)) {
                 switchToEditRecipeView()
             } else {
@@ -110,7 +119,7 @@ var recipeUiController = (function() {
         switchToRecipeListView: switchToRecipeListView,
         saveRecipe: saveRecipe,
         deleteRecipe: deleteRecipe,
-        initValidators: initValidators,
+        initEvents: initEvents,
         start: start
     }
 })();
