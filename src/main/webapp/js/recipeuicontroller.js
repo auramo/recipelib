@@ -71,7 +71,7 @@ var recipeUiController = (function() {
 
     function switchToRecipeListView(recipes) {
         function recipeListRow(recipe) {
-            return '<ul><a href="#" onclick="recipeUiController.switchToEditRecipeView(' + recipe.id + ')">' + recipe.name + '</a></ul>';
+            return '<li id="recipe-' + recipe.id + '"><a href="#" onclick="recipeUiController.switchToEditRecipeView(' + recipe.id + ')">' + recipe.name + '</a></li>';
         }
 
         function getRecipeListHtml() {
