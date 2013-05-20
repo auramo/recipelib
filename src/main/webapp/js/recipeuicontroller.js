@@ -62,8 +62,10 @@ var recipeUiController = (function() {
         Bacon.UI.textFieldValue($('.search-recipes')).debounce(500).onValue(search)
     }
 
-    function search(value) {
-        console.log(value)
+    function search(searchString) {
+        var found = _(cachedRecipes).filter(function(recipe) { return _.contains(recipe.name.toLowerCase(), searchString.toLowerCase()) }).map(function(filtered) { return "recipe-" + filtered.id }).value()
+        $('.recipe-list-row').filter(function() { return !_.contains(found, this.id) }).hide()
+        $('.recipe-list-row').filter(function() { return _.contains(found, this.id) }).show()
     }
 
     function start() {
@@ -80,7 +82,7 @@ var recipeUiController = (function() {
 
     function switchToRecipeListView(recipes) {
         function recipeListRow(recipe) {
-            return '<li id="recipe-' + recipe.id + '"><a href="#" onclick="recipeUiController.switchToEditRecipeView(' + recipe.id + ')">' + recipe.name + '</a></li>';
+            return '<li class="recipe-list-row" id="recipe-' + recipe.id + '"><a href="#" onclick="recipeUiController.switchToEditRecipeView(' + recipe.id + ')">' + recipe.name + '</a></li>';
         }
 
         function getRecipeListHtml() {
