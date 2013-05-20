@@ -84,13 +84,26 @@ var recipeUiController = (function() {
 
     function switchToRecipeListView(recipes) {
         function recipeListRow(recipe) {
-            return '<li class="recipe-list-row" id="recipe-' +
+
+            /*
+             <tr>
+             <td>John</td>
+             <td>Doe</td>
+             </tr>
+             <tr>
+             <td>Jane</td>
+             <td>Doe</td>
+             </tr>
+
+             */
+
+            return '<tr class="recipe-list-row" id="recipe-' +
                 recipe.id +
-                '"><a href="#" onclick="recipeUiController.switchToEditRecipeView(' +
+                '"><td class="recipe-list-row-name"><a href="#" onclick="recipeUiController.switchToEditRecipeView(' +
                 recipe.id +
                 ')">' +
                 recipe.name +
-                '</a></li>';
+                '</a></td><td>tagei</td></tr>';
         }
 
         function getRecipeListHtml() {
@@ -98,7 +111,7 @@ var recipeUiController = (function() {
         }
         $('.new-recipe').hide()
         $('.recipe-list').show()
-        $('.recipe-list ul').html(getRecipeListHtml())
+        $('.recipe-list tbody').html(getRecipeListHtml())
     }
 
     function saveRecipe() {

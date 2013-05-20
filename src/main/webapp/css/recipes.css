@@ -11,5 +11,5 @@
 .recipe-data-row label { float: left; }
 .recipe-data-row .recipe-shortfield { float: right; display: inline-block; }
 .recipe-list { display: none; }
-.recipe-list ul { list-style-type: none; padding:0; margin:0; }
-
+.recipe-list-row-name { width: 199px; }
+.recipe-list-name-heading { text-align: left; }
