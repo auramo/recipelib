@@ -63,7 +63,8 @@ var recipeUiController = (function() {
     }
 
     function search(searchString) {
-        function matchRecipe(recipe) { return _.contains(recipe.name.toLowerCase(), searchString.toLowerCase()) }
+        searchString = searchString.toLowerCase()
+        function matchRecipe(recipe) { return _.contains(recipe.name.toLowerCase(), searchString) || _.contains(recipe.tags, searchString) }
         var found = _(cachedRecipes).filter(matchRecipe).map(function(filtered) { return "recipe-" + filtered.id }).value()
         var rows = $('.recipe-list-row')
         rows.filter(function() { return !_.contains(found, this.id) }).hide()
@@ -84,26 +85,15 @@ var recipeUiController = (function() {
 
     function switchToRecipeListView(recipes) {
         function recipeListRow(recipe) {
-
-            /*
-             <tr>
-             <td>John</td>
-             <td>Doe</td>
-             </tr>
-             <tr>
-             <td>Jane</td>
-             <td>Doe</td>
-             </tr>
-
-             */
-
             return '<tr class="recipe-list-row" id="recipe-' +
                 recipe.id +
                 '"><td class="recipe-list-row-name"><a href="#" onclick="recipeUiController.switchToEditRecipeView(' +
                 recipe.id +
                 ')">' +
                 recipe.name +
-                '</a></td><td>tagei</td></tr>';
+                '</a></td><td>' +
+                recipe.tags +
+                '</td></tr>';
         }
 
         function getRecipeListHtml() {
