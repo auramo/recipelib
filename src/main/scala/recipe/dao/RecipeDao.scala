@@ -4,56 +4,91 @@ import recipe.{RecipeLibrary, Recipe}
 import recipe.db.AutoCloseControl._
 import recipe.db.MongoConnectionCreator
 import com.mongodb.casbah.Imports._
-import recipe.auth.User
+import org.bson.types.ObjectId
+import com.mongodb.casbah
 
 class RecipeDao {
-  def find(id: String): Option[RecipeLibrary] = {
+  def findRecipeLibrary(id: String): Option[RecipeLibrary] = {
     using(MongoConnectionCreator.createMongoConnection()) { mongoClient =>
-      val coll = getRecipeCollection(mongoClient)
-      val res: Option[DBObject] = coll.findOneByID(id)
+      val coll = getRecipeLibraryCollection(mongoClient)
+      val res: Option[DBObject] = coll.findOneByID(ObjectId.massageToObjectId(id))
       res.flatMap { resultObject => convert(resultObject) }
     }
   }
 
-  def save(recipeLibrary: RecipeLibrary) {
+  def saveRecipeLibrary(recipeLibrary: RecipeLibrary): String = {
     using(MongoConnectionCreator.createMongoConnection()) { mongoClient =>
-      val coll = getRecipeCollection(mongoClient)
-      val newValues = MongoDBObject(
-        "_id" -> recipeLibrary.id,
-        "name" -> recipeLibrary.name,
-        "recipes" -> convertRecipesToMongoObjects(recipeLibrary.recipes)
-      )
+      val coll = getRecipeLibraryCollection(mongoClient)
+      val attributesTail = if (recipeLibrary.id.isDefined) ("_id" -> ObjectId.massageToObjectId(recipeLibrary.id.get)) :: Nil else Nil
+      val attributes = "name" -> recipeLibrary.name :: attributesTail
+      val newValues = MongoDBObject(attributes)
       coll.save(newValues)
+      newValues.getAs[ObjectId]("_id").get.toString
     }
   }
 
-  private def convertRecipesToMongoObjects(recipes: List[Recipe]) = {
-    recipes.map { recipe =>
-      MongoDBObject(
-        "_id" -> recipe.id,
-        "name" -> recipe.name,
-        "tags" -> recipe.tags,
-        "contentId" -> recipe.contentId
-      )
+  def findRecipe(id: String): Option[Recipe] = {
+    using(MongoConnectionCreator.createMongoConnection()) { mongoClient =>
+      val coll = getRecipeCollection(mongoClient)
+      val res: Option[DBObject] = coll.findOneByID(ObjectId.massageToObjectId(id))
+      res.map { rawObject: DBObject =>
+        val id = rawObject.getAs[ObjectId]("_id").get.toString
+        val recipeLibraryId = rawObject.getAs[String]("recipeLibraryId").get
+        val name = rawObject.getAs[String]("name").get
+        val content = rawObject.getAs[String]("content").get
+        val tags = getTags(rawObject)
+        Recipe(Some(id), recipeLibraryId, name, tags, Some(content))
+      }
+    }
+  }
+
+  def listRecipes(recipeLibraryId: String): List[Recipe] = {
+    using(MongoConnectionCreator.createMongoConnection()) { mongoClient =>
+      val coll: casbah.MongoCollection = getRecipeCollection(mongoClient)
+      val query = MongoDBObject("recipeLibraryId" -> recipeLibraryId)
+      val keys = MongoDBObject("name" -> 1, "tags" -> 1, "recipeLibraryId" -> 1)
+      val res = coll.find(query, keys)
+      val convertedResults = for {rawObject <- res
+           id = rawObject.getAs[ObjectId]("_id").get.toString
+           recipeLibraryId = rawObject.getAs[String]("recipeLibraryId").get
+           name = rawObject.getAs[String]("name").get
+           tagsRaw: MongoDBList = rawObject.getAs[MongoDBList]("tags").get
+           tags = getTags(rawObject)
+        } yield (Recipe(Some(id), recipeLibraryId, name, tags, None))
+      convertedResults.toList
+    }
+  }
+
+  def saveRecipe(recipe: Recipe): String = {
+    using(MongoConnectionCreator.createMongoConnection()) { mongoClient =>
+      val coll = getRecipeCollection(mongoClient)
+      val attributesTail = if (recipe.id.isDefined) ("_id" -> ObjectId.massageToObjectId(recipe.id.get)) :: Nil else Nil
+      val attributes =
+        "name" -> recipe.name ::
+        "tags"-> recipe.tags ::
+        "content" -> recipe.content.get ::
+        "recipeLibraryId" -> recipe.recipeLibraryId ::
+        attributesTail
+      val newValues = MongoDBObject(attributes)
+      coll.save(newValues)
+      newValues.getAs[ObjectId]("_id").get.toString
     }
   }
 
   private def convert(res: DBObject): Option[RecipeLibrary] = {
-    val id = res.getAs[String]("_id").get
+    val id = res.getAs[ObjectId]("_id").get.toString
     val name = res.getAs[String]("name").get
-    val recipesRaw: MongoDBList = res.getAs[MongoDBList]("recipes").get
-    val recipes = recipesRaw.map { recipeRaw =>
-      val rawObject = recipeRaw.asInstanceOf[DBObject]
-      val id = rawObject.getAs[String]("_id").get
-      val contentId = rawObject.getAs[String]("contentId").get
-      val name = rawObject.getAs[String]("name").get
-      val tagsRaw: MongoDBList = rawObject.getAs[MongoDBList]("tags").get
-      val tags: List[String] = tagsRaw.collect { case l: String => l }.toList
-      Recipe(id, name, tags, contentId)
-    }
-    Some(RecipeLibrary(id, name, recipes.toList))
+    Some(RecipeLibrary(Some(id), name))
   }
 
+  private def getTags(res: DBObject): List[String] = {
+    val tagsRaw: MongoDBList = res.getAs[MongoDBList]("tags").get
+    tagsRaw.collect { case l: String => l }.toList
+  }
+
+  private def getRecipeLibraryCollection(mongoClient: MongoConnection) = {
+    MongoConnectionCreator.openMongoDb(mongoClient)("recipeLibraries")
+  }
   private def getRecipeCollection(mongoClient: MongoConnection) = {
     MongoConnectionCreator.openMongoDb(mongoClient)("recipes")
   }

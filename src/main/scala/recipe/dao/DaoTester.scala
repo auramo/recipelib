@@ -8,9 +8,23 @@ object DaoTester {
 //    case class RecipeLibrary(id: String, name: String, recipes: List[Recipe]) //Name can be e.g. email of the user who created the list
 //    case class Recipe(id: String, name: String, tags: List[String], contentId: String)
 
-    val recipeLib = RecipeLibrary("xx", "johanna@gmail", List(Recipe("11", "maksalaatikko", List("maksis", "loota"), "contentId1")))
-    //dao.save(recipeLib)
-    println(dao.find("xx"))
+    //, List(Recipe("11", "maksalaatikko", List("maksis", "loota"), "contentId1"))
+
+    //val recipeLib = RecipeLibrary(Some("51a261f80364536db853ebf1"), "johanna@gmail")
+    //val id = dao.saveRecipeLibrary(recipeLib)
+    //println(id)
+
+    //println(dao.findRecipeLibrary("51a261f80364536db853ebf1"))
+    //println(dao.findRecipeLibrary("xx"))
+
+    //case class Recipe(id: Option[String], recipeLibraryId: String, name: String, tags: List[String], content: Option[String])
+    //val id = dao.saveRecipe(Recipe(None, "51a261f80364536db853ebf1", "joku vaa", List("a", "b"), Some("kontenttii")))
+    //println(id)
+
+    //println(dao.findRecipe("51a26dea03641b9ebbba4ff4"))
+
+    val recipes = dao.listRecipes("51a261f80364536db853ebf1")
+    println(recipes)
   }
 
   def userStuff {
