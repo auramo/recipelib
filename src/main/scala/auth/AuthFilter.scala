@@ -34,7 +34,7 @@ class AuthFilter extends ScalatraFilter {
       }
       case Left(errMsg) => {
         println(errMsg)
-        "Login failed"
+        "Login failed: " + errMsg
       }
     }
   }
