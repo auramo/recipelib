@@ -18,10 +18,10 @@ class OpenIdConsumer {
 
   def authenticateGoogleUser(request: HttpServletRequest, response: HttpServletResponse) {
     val googleOpenIdRequestString = "https://www.google.com/accounts/o8/id"
-    val returnToUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/openid"
+    val portPart = if (request.getServerPort != 80) ":" + request.getServerPort() else ""
+    val returnToUrl = request.getScheme() + "://" + request.getServerName() + portPart + "/openid"
 
-    println("Return to URL:")
-    println(returnToUrl)
+    println("Return to URL: " + returnToUrl)
 
     authRequest(googleOpenIdRequestString, returnToUrl, request, response)
   }
