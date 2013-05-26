@@ -35,8 +35,8 @@ class UserDao {
   private def convertToUser(res: DBObject): Some[User] = {
     val id = res.getAs[String]("_id").get
     val email = res.getAs[String]("email").get
-    val recipeLibrariesRaw: MongoDBList = res.getAs[MongoDBList]("recipeLibraries").get
-    val recipeLibraries: List[String] = recipeLibrariesRaw.collect { case l: String => l }.toList
+      val recipeLibrariesRaw: MongoDBList = res.getAs[MongoDBList]("recipeLibraries").get
+      val recipeLibraries: List[String] = recipeLibrariesRaw.collect { case l: String => l }.toList
     Some(User(id, email, recipeLibraries))
   }
 }
