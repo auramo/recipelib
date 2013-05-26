@@ -1,4 +1,6 @@
-package recipe
+package recipe.api
+
+import recipe.RecipelibStack
 
 class RecipeApiServlet extends RecipelibStack {
   get("/api/") {

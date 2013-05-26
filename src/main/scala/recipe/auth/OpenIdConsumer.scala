@@ -1,4 +1,4 @@
-package auth
+package recipe.auth
 
 import org.openid4java.discovery.Identifier
 import org.openid4java.discovery.DiscoveryInformation

@@ -1,4 +1,4 @@
-package auth
+package recipe.auth
 
 import org.scalatra.ScalatraFilter
 
