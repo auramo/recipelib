@@ -18,13 +18,13 @@ object DaoTester {
     //println(dao.findRecipeLibrary("xx"))
 
     //case class Recipe(id: Option[String], recipeLibraryId: String, name: String, tags: List[String], content: Option[String])
-    //val id = dao.saveRecipe(Recipe(None, "51a261f80364536db853ebf1", "joku vaa", List("a", "b"), Some("kontenttii")))
-    //println(id)
+    val id = dao.saveRecipe(Recipe(None, "51a261f80364536db853ebf1", "jeepapje", List("x", "y"), None, Some("sontenttiio")))
+    println(id)
 
-    //println(dao.findRecipe("51a26dea03641b9ebbba4ff4"))
+    println(dao.findRecipe(id))
 
-    val recipes = dao.listRecipes("51a261f80364536db853ebf1")
-    println(recipes)
+    //val recipes = dao.listRecipes("51a261f80364536db853ebf1")
+    //println(recipes)
   }
 
   def userStuff {

@@ -35,9 +35,10 @@ class RecipeDao {
         val id = rawObject.getAs[ObjectId]("_id").get.toString
         val recipeLibraryId = rawObject.getAs[String]("recipeLibraryId").get
         val name = rawObject.getAs[String]("name").get
-        val content = rawObject.getAs[String]("content").get
+        val originalAddress = rawObject.getAs[String]("originalAddress")
+        val content = rawObject.getAs[String]("content")
         val tags = getTags(rawObject)
-        Recipe(Some(id), recipeLibraryId, name, tags, Some(content))
+        Recipe(Some(id), recipeLibraryId, name, tags, originalAddress, content)
       }
     }
   }
@@ -54,7 +55,7 @@ class RecipeDao {
            name = rawObject.getAs[String]("name").get
            tagsRaw: MongoDBList = rawObject.getAs[MongoDBList]("tags").get
            tags = getTags(rawObject)
-        } yield (Recipe(Some(id), recipeLibraryId, name, tags, None))
+        } yield (Recipe(Some(id), recipeLibraryId, name, tags, None, None))
       convertedResults.toList
     }
   }
@@ -68,6 +69,7 @@ class RecipeDao {
         "tags"-> recipe.tags ::
         "content" -> recipe.content.get ::
         "recipeLibraryId" -> recipe.recipeLibraryId ::
+        "originalAddress" -> recipe.originalAddress ::
         attributesTail
       val newValues = MongoDBObject(attributes)
       coll.save(newValues)
