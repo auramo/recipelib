@@ -1,12 +1,21 @@
 package recipe.api
 
 import recipe.RecipelibStack
+import recipe.service.RecipeService
+import recipe.auth.{User, AuthenticatedUser}
 
-class RecipeApiServlet extends RecipelibStack {
+class RecipeApiServlet(recipeService: RecipeService) extends RecipelibStack {
   get("/api/") {
     """{"data": 5}"""
   }
+
+  def getUser = {
+    request.getSession.getAttribute("authenticated-user").asInstanceOf[AuthenticatedUser]
+  }
+
   get("/") {
+    val authUser = getUser
+
     """
       {"recipes": [{"id": "1", "name": "Maksalaatikko", "tags": ["loota", "perinneruoka"]},
                    {"id": "2", "name": "Lihapullat", "tags": ["perus"]},

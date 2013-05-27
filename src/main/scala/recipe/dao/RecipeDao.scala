@@ -33,7 +33,7 @@ class RecipeDao {
       val res: Option[DBObject] = coll.findOneByID(ObjectId.massageToObjectId(id))
       res.map { rawObject: DBObject =>
         val id = rawObject.getAs[ObjectId]("_id").get.toString
-        val recipeLibraryId = rawObject.getAs[String]("recipeLibraryId").get
+        val recipeLibraryId = rawObject.getAs[String]("recipeLibraryId")
         val name = rawObject.getAs[String]("name").get
         val originalAddress = rawObject.getAs[String]("originalAddress")
         val content = rawObject.getAs[String]("content")
@@ -51,7 +51,7 @@ class RecipeDao {
       val res = coll.find(query, keys)
       val convertedResults = for {rawObject <- res
            id = rawObject.getAs[ObjectId]("_id").get.toString
-           recipeLibraryId = rawObject.getAs[String]("recipeLibraryId").get
+           recipeLibraryId = rawObject.getAs[String]("recipeLibraryId")
            name = rawObject.getAs[String]("name").get
            tagsRaw: MongoDBList = rawObject.getAs[MongoDBList]("tags").get
            tags = getTags(rawObject)
