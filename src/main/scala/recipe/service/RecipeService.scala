@@ -23,6 +23,11 @@ class RecipeService(val userDao: UserDao, val recipeDao: RecipeDao) {
     }
   }
 
+  def getRecipe(authUser: AuthenticatedUser, id: String): Option[Recipe] = {
+    //TODO check access from authUser to recipe
+    recipeDao.findRecipe(id)
+  }
+
   def saveRecipe(authUser: AuthenticatedUser, recipe: Recipe) {
     getStoredUser(authUser) match {
       case Some(User(id, email, recipeLibraries)) => {

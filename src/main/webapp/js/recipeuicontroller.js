@@ -87,9 +87,9 @@ var recipeUiController = (function() {
         function recipeListRow(recipe) {
             return '<tr class="recipe-list-row" id="recipe-' +
                 recipe.id +
-                '"><td class="recipe-list-row-name"><a href="#" onclick="recipeUiController.switchToEditRecipeView(' +
+                '"><td class="recipe-list-row-name"><a href="#" onclick="recipeUiController.switchToEditRecipeView(\'' +
                 recipe.id +
-                ')">' +
+                '\')">' +
                 recipe.name +
                 '</a></td><td>' +
                 recipe.tags +
@@ -110,7 +110,7 @@ var recipeUiController = (function() {
         var recipeTags = recipeTagsField().val()
         var originalAddress = recipeOriginalAddressField().val()
         var recipeContent = getRecipeContent();
-        var recipeObject = { name: recipeName, tags: recipeTags, content: recipeContent, originalAddress: originalAddress }
+        var recipeObject = { name: recipeName, tags: recipeTags.split(" "), content: recipeContent, originalAddress: originalAddress }
         if (_.isEmpty(recipeId)) {
             recipeService.createNewRecipe(recipeObject, function() { console.log("Successfully created") })
         }
