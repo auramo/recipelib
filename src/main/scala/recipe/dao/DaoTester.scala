@@ -1,7 +1,6 @@
 package recipe.dao
 
-import recipe.{Recipe, RecipeLibrary}
-import java.nio.file.attribute.UserPrincipalLookupService
+import recipe.Recipe
 import recipe.service.RecipeService
 import recipe.auth.AuthenticatedUser
 import org.openid4java.discovery.Identifier
