@@ -45,8 +45,12 @@ var recipeUiController = (function() {
         if (recipeId) {
             console.log("Switching to edit view with id: " + recipeId)
             recipeService.getRecipe(recipeId, fillEditRecipeFields)
+            $(".save-button").removeAttr("disabled")
+            $(".delete-button").removeAttr("disabled")
         } else {
             fillEditRecipeFields({name: "", tags: "", originalAddress: "", content: ""})
+            $(".save-button").attr("disabled", "disabled")
+            $(".delete-button").attr("disabled", "disabled")
         }
         $('.new-recipe').show()
         $('.recipe-list').hide()
@@ -56,9 +60,8 @@ var recipeUiController = (function() {
         function nonEmpty(x) { return x.length > 0 && x !== '<br>' }
         var recipeNameEntered = Bacon.UI.textFieldValue(recipeNameField()).map(nonEmpty)
         var recipeContentEntered = recipientContentValue().map(nonEmpty)
-        var buttonEnabled = recipeNameEntered.and(recipeContentEntered)
+        var buttonEnabled = recipeNameEntered.and(recipeContentEntered)//.and(recipeTagsEntered)
         buttonEnabled.not().onValue($(".save-button"), "attr", "disabled")
-
         Bacon.UI.textFieldValue($('.search-recipes')).debounce(400).onValue(search)
     }
 
