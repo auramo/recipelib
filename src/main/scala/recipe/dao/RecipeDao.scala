@@ -77,6 +77,13 @@ class RecipeDao {
     }
   }
 
+  def deleteRecipe (id: String) = {
+    using(MongoConnectionCreator.createMongoConnection()) { mongoClient =>
+      val coll = getRecipeCollection(mongoClient)
+      coll.findAndRemove(MongoDBObject("_id" -> ObjectId.massageToObjectId(id)))
+    }
+  }
+
   private def convert(res: DBObject): Option[RecipeLibrary] = {
     val id = res.getAs[ObjectId]("_id").get.toString
     val name = res.getAs[String]("name").get

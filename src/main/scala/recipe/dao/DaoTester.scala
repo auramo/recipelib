@@ -34,8 +34,12 @@ object DaoTester {
     val authUser: AuthenticatedUser = AuthenticatedUser(new Identifier() {
       def getIdentifier = "123"
     }, Some("mail"))
-    service.getRecipes(authUser)
-    service.saveRecipe(authUser, Recipe(None, None, "maksaloota", List("x"), Some("http://kuu"), Some("jee kontent")))
+    //service.saveRecipe(authUser, Recipe(None, None, "maksaloota", List("x"), Some("http://kuu"), Some("jee kontent")))
+    service.deleteRecipe(authUser, "51a6535b03649cb78f4dc479")
+    service.deleteRecipe(authUser, "51a8eb27036419fb2a384a6a")
+
+    val recipes = service.getRecipes(authUser)
+    println(recipes)
 
   }
 

@@ -44,6 +44,10 @@ class RecipeService(val userDao: UserDao, val recipeDao: RecipeDao) {
     }
   }
 
+  def deleteRecipe(authUser: AuthenticatedUser, id: String) {
+    recipeDao.deleteRecipe(id)
+  }
+
   def createUserAndRecipeLibrary(authUser: AuthenticatedUser): String = {
     val newLibrary: RecipeLibrary = RecipeLibrary(None, authUser.email.getOrElse(authUser.identifier.getIdentifier))
     val libraryId = recipeDao.saveRecipeLibrary(newLibrary)
