@@ -2,23 +2,23 @@ var recipeUiController = (function() {
 
     var cachedRecipes = []
 
-    function recipeIdField() {
+    function recipeIdEditField() {
         return $('input[name="recipe-id"]')
     }
 
-    function recipeNameField() {
+    function recipeNameEditField() {
         return $('input[name=recipe-name]')
     }
 
-    function recipeTagsField() {
+    function recipeTagsEditField() {
         return $('input[name=recipe-tags]')
     }
 
-    function recipeOriginalAddressField() {
+    function recipeOriginalAddressEditField() {
         return $('input[name=original-address]')
     }
 
-    function recipeContentField() {
+    function recipeContentEditField() {
         return nicEditors.findEditor('recipe-content')
     }
 
@@ -30,15 +30,34 @@ var recipeUiController = (function() {
     }
 
     function getRecipeContent() {
-        return recipeContentField().getContent()
+        return recipeContentEditField().getContent()
+    }
+
+    function splitTags(recipe) {
+        return _(recipe.tags).join(" ")
     }
 
     function fillEditRecipeFields(recipe) {
-        recipeIdField().val(recipe.id)
-        recipeNameField().val(recipe.name)
-        recipeTagsField().val(_(recipe.tags).join(" "))
-        recipeOriginalAddressField().val(recipe.originalAddress)
-        recipeContentField().setContent(recipe.content)
+        recipeIdEditField().val(recipe.id)
+        recipeNameEditField().val(recipe.name)
+        recipeTagsEditField().val(splitTags(recipe))
+        recipeOriginalAddressEditField().val(recipe.originalAddress)
+        recipeContentEditField().setContent(recipe.content)
+    }
+
+    function fillShowRecipeFields(recipe) {
+        $('.recipe-name-show').html(recipe.name)
+        $('.recipe-tags-show').html(splitTags(recipe))
+        $('.recipe-original-address-show').html(recipe.originalAddress)
+        $('.recipe-content-show').html(recipe.content)
+    }
+
+    function switchToShowRecipeView(recipeId) {
+        recipeService.getRecipe(recipeId, fillShowRecipeFields)
+        $('.edit-button').click(function() { switchToEditRecipeView(recipeId)} )
+        $('.show-recipe').show()
+        $('.recipe-list').hide()
+        $('.new-recipe').hide()
     }
 
     function switchToEditRecipeView(recipeId) {
@@ -54,11 +73,12 @@ var recipeUiController = (function() {
         }
         $('.new-recipe').show()
         $('.recipe-list').hide()
+        $('.show-recipe').hide()
     }
 
     function initEvents() {
         function nonEmpty(x) { return x.length > 0 && x !== '<br>' }
-        var recipeNameEntered = Bacon.UI.textFieldValue(recipeNameField()).map(nonEmpty)
+        var recipeNameEntered = Bacon.UI.textFieldValue(recipeNameEditField()).map(nonEmpty)
         var recipeContentEntered = recipientContentValue().map(nonEmpty)
         var buttonEnabled = recipeNameEntered.and(recipeContentEntered)//.and(recipeTagsEntered)
         buttonEnabled.not().onValue($(".save-button"), "attr", "disabled")
@@ -90,7 +110,7 @@ var recipeUiController = (function() {
         function recipeListRow(recipe) {
             return '<tr class="recipe-list-row" id="recipe-' +
                 recipe.id +
-                '"><td class="recipe-list-row-name"><a href="#" onclick="recipeUiController.switchToEditRecipeView(\'' +
+                '"><td class="recipe-list-row-name"><a href="#" onclick="recipeUiController.switchToShowRecipeView(\'' +
                 recipe.id +
                 '\')">' +
                 recipe.name +
@@ -103,15 +123,16 @@ var recipeUiController = (function() {
             return _(recipes).map(function(recipe) { return recipeListRow(recipe); }).reduce(function (r1, r2) { return r1 + r2 })
         }
         $('.new-recipe').hide()
+        $('.show-recipe').hide()
         $('.recipe-list').show()
         $('.recipe-list tbody').html(getRecipeListHtml())
     }
 
     function saveRecipe() {
-        var recipeId = recipeIdField().val()
-        var recipeName = recipeNameField().val()
-        var recipeTags = recipeTagsField().val()
-        var originalAddress = recipeOriginalAddressField().val()
+        var recipeId = recipeIdEditField().val()
+        var recipeName = recipeNameEditField().val()
+        var recipeTags = recipeTagsEditField().val()
+        var originalAddress = recipeOriginalAddressEditField().val()
         var recipeContent = getRecipeContent();
         var recipeObject = { name: recipeName, tags: recipeTags.split(" "), content: recipeContent, originalAddress: originalAddress }
         if (_.isEmpty(recipeId)) {
@@ -124,7 +145,7 @@ var recipeUiController = (function() {
     }
 
     function deleteRecipe() {
-        var recipeId = recipeIdField().val()
+        var recipeId = recipeIdEditField().val()
         if (!_.isEmpty(recipeId)) {
             recipeService.deleteRecipe(recipeId, function() { console.log("Successfully deleted"); start() })
         }
@@ -133,6 +154,7 @@ var recipeUiController = (function() {
     return {
         switchToEditRecipeView: switchToEditRecipeView,
         switchToRecipeListView: switchToRecipeListView,
+        switchToShowRecipeView: switchToShowRecipeView,
         saveRecipe: saveRecipe,
         deleteRecipe: deleteRecipe,
         initEvents: initEvents,
