@@ -36,7 +36,7 @@ var recipeUiController = (function() {
     function fillEditRecipeFields(recipe) {
         recipeIdField().val(recipe.id)
         recipeNameField().val(recipe.name)
-        recipeTagsField().val(recipe.tags)
+        recipeTagsField().val(_(recipe.tags).join(" "))
         recipeOriginalAddressField().val(recipe.originalAddress)
         recipeContentField().setContent(recipe.content)
     }
@@ -92,7 +92,7 @@ var recipeUiController = (function() {
                 '\')">' +
                 recipe.name +
                 '</a></td><td>' +
-                recipe.tags +
+                _(recipe.tags).join(" ") +
                 '</td></tr>';
         }
 
