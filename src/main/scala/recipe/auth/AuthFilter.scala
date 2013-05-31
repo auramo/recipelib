@@ -1,9 +1,13 @@
 package recipe.auth
 
 import org.scalatra.ScalatraFilter
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 
 class AuthFilter extends ScalatraFilter {
   val consumer = new OpenIdConsumer
+  val logger: Logger = LoggerFactory.getLogger(getClass)
 
   before("/recipes/*") {
     if (request.getSession.getAttribute("authenticated-user") == null) {
@@ -14,17 +18,15 @@ class AuthFilter extends ScalatraFilter {
   }
 
   before("/recipeapi/*") {
-    println("###AuthFilter recipeapi filter###")
+    logger.info("AuthFiltering recipeapi")
     if (request.getSession.getAttribute("authenticated-user") == null) {
       halt(401, "Not authencitated")
     }
   }
 
   get("/openid") {
-    println("to return page")
-    println("consumer instance: " + consumer)
     val retval = consumer.verifyResponse(request)
-    println("retval: " + retval)
+    logger.info("openid return value: " + retval)
     retval match {
       case Right(authUser) => {
         request.getSession.setAttribute("authenticated-user", authUser)
@@ -33,7 +35,7 @@ class AuthFilter extends ScalatraFilter {
         "Login ok"
       }
       case Left(errMsg) => {
-        println(errMsg)
+        logger.error(errMsg)
         "Login failed: " + errMsg
       }
     }

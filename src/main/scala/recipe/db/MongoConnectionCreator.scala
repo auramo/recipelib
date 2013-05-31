@@ -20,8 +20,6 @@ object MongoConnectionCreator {
   }
   def dbName = connectionParams.dbName
   def createMongoConnection(): MongoConnection = {
-    println("connectionParams")
-    println(connectionParams)
     MongoConnection(connectionParams.host, connectionParams.port)
   }
 

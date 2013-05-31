@@ -10,18 +10,23 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import java.util.List
 import org.openid4java.consumer.{VerificationResult, ConsumerManager}
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 
 case class AuthenticatedUser(identifier: Identifier, email: Option[String])
 
 class OpenIdConsumer {
   val manager: ConsumerManager = new ConsumerManager
+  val logger: Logger = LoggerFactory.getLogger(getClass)
+
 
   def authenticateGoogleUser(request: HttpServletRequest, response: HttpServletResponse) {
     val googleOpenIdRequestString = "https://www.google.com/accounts/o8/id"
     val portPart = if (request.getServerPort != 80) ":" + request.getServerPort() else ""
     val returnToUrl = request.getScheme() + "://" + request.getServerName() + portPart + "/openid"
 
-    println("Return to URL: " + returnToUrl)
+    logger.info("Return to URL: " + returnToUrl)
 
     authRequest(googleOpenIdRequestString, returnToUrl, request, response)
   }

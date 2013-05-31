@@ -2,91 +2,82 @@ package recipe.api
 
 import recipe.{Recipe, Recipes, RecipelibStack}
 import recipe.service.RecipeService
-import recipe.auth.{User, AuthenticatedUser}
-import org.json4s.native.Serialization
-import org.json4s.NoTypeHints
 import org.json4s._
 import org.json4s.native.Serialization
 import org.json4s.native.Serialization.{read, write}
-import org.json4s.jackson.Serialization._
 import recipe.auth.AuthenticatedUser
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 class RecipeApiServlet(recipeService: RecipeService) extends RecipelibStack {
   implicit val formats = Serialization.formats(NoTypeHints)
-
-  get("/api/") {
-    """{"data": 5}"""
-  }
-
-  def getUser = {
-    request.getSession.getAttribute("authenticated-user").asInstanceOf[AuthenticatedUser]
-  }
+  val logger: Logger = LoggerFactory.getLogger(getClass)
 
   get("/") {
     val authUser = getUser
     val recipeList = recipeService.getRecipes(authUser)
     val recipes = Recipes(recipeList)
     val result = write(recipes)
-    println("Sending result")
-    println(result)
+    logger.info(s"GET request to root, sending list of ${recipes.recipes.length} recipes")
     result
-    /*"""
-      {"recipes": [{"id": "1", "name": "Maksalaatikko", "tags": ["loota", "perinneruoka"]},
-                   {"id": "2", "name": "Lihapullat", "tags": ["perus"]},
-                   {"id": "3", "name": "Kalapuikot", "tags": ["eines", "paha"]}
-                   ]}
-    """                      */
   }
 
   get("/:id") {
     val id = params("id")
-    println("Got recipe retrieval request with id: " + id)
+    logger.info("GET request with id: " + id)
     val result = recipeService.getRecipe(getUser, id)
     if (result.isDefined) {
       val recipeJsonString = write(result.get)
-      println("Sending recipe json string:")
-      println(recipeJsonString)
+      logger.info("Recipe found")
       recipeJsonString
     } else {
-      halt(404, """{"ok": false, "message": "recipe not found"}""")
+      logger.error(s"Recipe $id not found")
+      halt(404, write(Response(ok = false, Some(s"Recipe $id not found"))))
     }
-
-    /*"""
-      {"id": "1", "name": "Maksalaatikko", "tags": ["loota", "perinneruoka"], "content":"maksat uuniin", "originalAddress": "http://huu.haa" }
-    """*/
   }
 
   post("/") {
-    println("Post got this:")
-    println(request)
-    println(request.body)
+    logger.info("POST request")
+    logger.info(request.body)
     parseAndSaveRecipe
-    """{"ok": true}"""
+    ok
   }
 
 
   put("/:id") {
-    println("PUT got this:")
     val id = params("id")
-    println("PUT request with id: " + id)
-    println(request.body)
+    logger.info("PUT request with id: " + id)
+    logger.info(request.body)
     parseAndSaveRecipe
-    """{"ok": true}"""
+    ok
   }
 
   delete("/:id") {
     val id = params("id")
-    println("DELETE request with id: " + id)
-    """{"ok": true}"""
+    logger.info("DELETE request with id: " + id)
+    recipeService.deleteRecipe(getUser, id)
+    ok
   }
 
   private def parseAndSaveRecipe {
-    try {
-      val parsedRecipe = read[Recipe](request.body)
-      println("Parsed recipe")
-      println(parsedRecipe)
-      recipeService.saveRecipe(getUser, parsedRecipe)
-    } catch { case e: Exception => e.printStackTrace(); throw e; }
+    val parsedRecipe = read[Recipe](request.body)
+    recipeService.saveRecipe(getUser, parsedRecipe)
   }
+
+  private def getUser = {
+    request.getSession.getAttribute("authenticated-user").asInstanceOf[AuthenticatedUser]
+  }
+
+  private val errorLogger: PartialFunction[Throwable, Throwable] = {
+    case e => logger.error(e.getMessage, e)
+      e
+  }
+
+  errorHandler = errorLogger andThen errorHandler
+
+  private def ok = write(Response())
+
+  case class Response(ok: Boolean = true, message: Option[String] = None)
 
 }

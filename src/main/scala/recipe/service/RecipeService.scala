@@ -24,18 +24,20 @@ class RecipeService(val userDao: UserDao, val recipeDao: RecipeDao) {
   }
 
   def getRecipe(authUser: AuthenticatedUser, id: String): Option[Recipe] = {
-    //TODO check access from authUser to recipe
+    //We could also check access here, but nah, let's see. Current access check would then fetch it twice, so something smarter should be there
     recipeDao.findRecipe(id)
   }
 
   def saveRecipe(authUser: AuthenticatedUser, recipe: Recipe) {
     getStoredUser(authUser) match {
       case Some(User(id, email, recipeLibraries)) => {
+        if (recipe.id.isDefined) checkAccess(authUser, recipe.id.get) //Storing existing recipe
         val recipeWithLibraryId: Recipe = recipe.copy(recipeLibraryId = Some(recipeLibraries.head))
         logger.info(s"Found user for id $id, email $email. Saving recipes to library ${recipeLibraries.head}")
         recipeDao.saveRecipe(recipeWithLibraryId)
       }
       case None => {
+        if (recipe.id.isDefined) throw new IllegalAccessError("New user can't save existing recipe")
         val libraryId = createUserAndRecipeLibrary(authUser)
         val recipeWithLibraryId: Recipe = recipe.copy(recipeLibraryId = Some(libraryId))
         logger.info(s"No user $authUser found, so no recipe library yet. Storing user and new library $libraryId")
@@ -45,6 +47,7 @@ class RecipeService(val userDao: UserDao, val recipeDao: RecipeDao) {
   }
 
   def deleteRecipe(authUser: AuthenticatedUser, id: String) {
+    checkAccess(authUser, id)
     recipeDao.deleteRecipe(id)
   }
 
@@ -61,5 +64,16 @@ class RecipeService(val userDao: UserDao, val recipeDao: RecipeDao) {
     val userId: String = authUser.identifier.getIdentifier
     userDao.find(userId)
   }
+
+  private def checkAccess(authUser: AuthenticatedUser, id: String) {
+    getStoredUser(authUser) match {
+      case Some(User(_, _, recipeLibraries)) => {
+        val libraryId = recipeLibraries.head
+        if (!recipeDao.recipeBelongsToLibrary(id, libraryId)) accessError(authUser, id)
+      }
+      case None => accessError(authUser, id)
+    }
+  }
+  private def accessError(authUser: AuthenticatedUser, id: String): Nothing = throw new IllegalAccessException(s"User $authUser doesn't have access to $id")
 
 }

@@ -60,6 +60,13 @@ class RecipeDao {
     }
   }
 
+  def recipeBelongsToLibrary(recipeId: String, libraryId: String): Boolean = {
+    findRecipe(recipeId) match {
+      case Some(recipe) => recipe.recipeLibraryId.get == libraryId
+      case None => false
+    }
+  }
+
   def saveRecipe(recipe: Recipe): String = {
     using(MongoConnectionCreator.createMongoConnection()) { mongoClient =>
       val coll = getRecipeCollection(mongoClient)

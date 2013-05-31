@@ -32,12 +32,20 @@ object DaoTester {
 
     val service = new RecipeService(new UserDao, new RecipeDao)
     val authUser: AuthenticatedUser = AuthenticatedUser(new Identifier() {
-      def getIdentifier = "123"
+      def getIdentifier = "9123"
     }, Some("mail"))
-    //service.saveRecipe(authUser, Recipe(None, None, "maksaloota", List("x"), Some("http://kuu"), Some("jee kontent")))
-    service.deleteRecipe(authUser, "51a6535b03649cb78f4dc479")
-    service.deleteRecipe(authUser, "51a8eb27036419fb2a384a6a")
 
+    //service.saveRecipe(authUser, Recipe(Some("51a8fe5303641878331d48f4"), None, "kukkalaatikko", List("x"), Some("http://kuu"), Some("jee kontent")))
+    //service.saveRecipe(authUser, Recipe(None, None, "kukkalaatikko", List("x"), Some("http://kuu"), Some("jee kontent")))
+    //println("saved!")
+
+    //service.deleteRecipe(authUser, "51a6535b03649cb78f4dc479")
+
+    //Let's try this after
+    service.deleteRecipe(authUser, "51a8fe5303641878331d48f4")
+
+    //The stored one:
+    //51a8fe5303641878331d48f4
     val recipes = service.getRecipes(authUser)
     println(recipes)
 
