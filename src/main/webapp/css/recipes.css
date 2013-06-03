@@ -16,8 +16,8 @@
 .recipe-list-row-name { width: 199px; }
 .recipe-list-heading { text-align: left; }
 .heading { color: #0099b8; font-family: 'Arial', sans-serif; font-weight: 600; }
-.navi-button { margin-bottom: 3px; }
-.logo-image { margin-bottom: 24px; margin-left: 19px; }
+.navi-button { margin-bottom: 6px; }
+.header-image { margin-bottom: 24px; margin-left: 11px; margin-top: 11px; }
 button { font-family: Arial,Helvetica,Geneva,sans-serif; font-weight: bold; background: #64BBE6 linear-gradient(#64BBE6 0%, #64BBE6 50%, #008AC8 100%); background-size: 100% auto; border: 0 none; color: #FFFFFF; padding: 4px 10px; text-decoration: none; width: 83px; border-radius: 4px; box-shadow: 4px 4px 4px #888;}
 button:disabled { background: #64BBE6 linear-gradient(#5A5C5C 0%, #A0A2A4 50%, #E1E3E4 100%);  }
 button:hover:enabled { background: #64BBE6 linear-gradient(#498DAF 0%, #306884 50%, #1D4355 100%);  }
