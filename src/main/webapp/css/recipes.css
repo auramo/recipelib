@@ -18,4 +18,5 @@
 .navi-button { margin-bottom: 3px; }
 .logo-image { margin-bottom: 24px; margin-left: 19px; }
 button { font-family: Arial,Helvetica,Geneva,sans-serif; font-weight: bold; background: #64BBE6 linear-gradient(#64BBE6 0%, #64BBE6 50%, #008AC8 100%); background-size: 100% auto; border: 0 none; color: #FFFFFF; padding: 4px 10px; text-decoration: none; width: 83px; border-radius: 4px;}
+button:disabled { background: #64BBE6 linear-gradient(#5A5C5C 0%, #A0A2A4 50%, #E1E3E4 100%)  }
 body { font-family: Arial,Helvetica,Geneva,sans-serif; }
