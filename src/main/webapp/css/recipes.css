@@ -6,6 +6,7 @@
 .new-recipe { }
 .save-button { margin-bottom: 10px; }
 .delete-button { margin-bottom: 10px; margin-left: 5px; }
+/*.search-recipes {margin-left: 10px; border-radius: 3px 3px 3px 3px; box-shadow: inset 1px 1px 1px #e3e3e3; border: 1px solid #e2e1e1; font: 1em Arial, Helvetica, Geneva, sans-serif; }*/
 .search-recipes {margin-left: 10px; }
 .recipe-shortfields { width: 33%; }
 .recipe-data-row { margin-bottom: 10px; margin-right: 5px; clear: both; display: inline-block; width: 100%; }
@@ -21,3 +22,4 @@ button { font-family: Arial,Helvetica,Geneva,sans-serif; font-weight: bold; back
 button:disabled { background: #64BBE6 linear-gradient(#5A5C5C 0%, #A0A2A4 50%, #E1E3E4 100%);  }
 button:hover:enabled { background: #64BBE6 linear-gradient(#498DAF 0%, #306884 50%, #1D4355 100%);  }
 body { font-family: Arial,Helvetica,Geneva,sans-serif; }
+input[type=text] { border-radius: 3px 3px 3px 3px; box-shadow: inset 1px 1px 1px #e3e3e3; border: 1px solid #e2e1e1; font: 1em Arial, Helvetica, Geneva, sans-serif; }
