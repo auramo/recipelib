@@ -36,17 +36,18 @@
         </table>
     </div>
     <div class="show-recipe">
-        <button class="edit-button" value="Muokkaa">Muokkaa</button>
-        <div class="recipe-name-show"></div>
-        <div class="recipe-tags-show"></div>
-        <div class="recipe-original-address-show"></div>
+        <div class="recipe-showfields">
+            <div class="recipe-data-row"><span class="recipe-name-show heading"></span><button class="edit-button" value="Muokkaa">Muokkaa</button></div>
+            <div class="recipe-data-row"><label class="heading">Avainsanat:</label><span class="recipe-tags-show recipe-shortfield"></span></div>
+            <div class="recipe-data-row"><label class="heading">Alkuperäinen osoite:</label><span class="recipe-original-address-show recipe-shortfield"></span></div>
+        </div>
         <div class="recipe-content-show"></div>
     </div>
     <div class="new-recipe">
         <input type="hidden" name="recipe-id"></input>
         <div class="recipe-shortfields">
             <div class="recipe-data-row"><label>Nimi:</label><input class="recipe-shortfield" name="recipe-name" type="text"></input></div>
-            <div class="recipe-data-row"><label>Tagit:</label><input class="recipe-shortfield" name="recipe-tags" type="text"></input></div>
+            <div class="recipe-data-row"><label>Avainsanat:</label><input class="recipe-shortfield" name="recipe-tags" type="text"></input></div>
             <div class="recipe-data-row"><label>Alkuperäinen osoite:</label><input class="recipe-shortfield" name="original-address" type="text"></input></div>
         </div>
         <button class="save-button" onclick="recipeUiController.saveRecipe()" value="Tallenna">Tallenna</button>

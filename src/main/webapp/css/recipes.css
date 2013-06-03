@@ -6,12 +6,16 @@
 .new-recipe { }
 .save-button { margin-bottom: 10px; }
 .delete-button { margin-bottom: 10px; margin-left: 5px; }
+.edit-button { float: right; }
 /*.search-recipes {margin-left: 10px; border-radius: 3px 3px 3px 3px; box-shadow: inset 1px 1px 1px #e3e3e3; border: 1px solid #e2e1e1; font: 1em Arial, Helvetica, Geneva, sans-serif; }*/
 .search-recipes {margin-left: 10px; }
-.recipe-shortfields { width: 33%; }
+.recipe-shortfields {  width: 550px; }
+.recipe-showfields { width: 550px; }
 .recipe-data-row { margin-bottom: 10px; margin-right: 5px; clear: both; display: inline-block; width: 100%; }
 .recipe-data-row label { float: left; }
-.recipe-data-row .recipe-shortfield { float: right; display: inline-block; }
+.recipe-data-row .recipe-shortfield { float: right; display: inline-block; width: 300px; }
+.recipe-name-show { font-size: 1.3em; }
+.recipe-content-show { margin-bottom: 40px; }
 .recipe-list { display: none; }
 .recipe-list-row-name { width: 199px; }
 .recipe-list-heading { text-align: left; }
