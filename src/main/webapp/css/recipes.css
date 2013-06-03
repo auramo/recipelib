@@ -1,4 +1,4 @@
-.navi {float: left; width: 12%; }
+.navi {float: left; width: 12%; margin-left: 10px; }
 .navi ul { list-style-type: none; padding:0; margin:0; }
 .search { margin-bottom: 20px; }
 .content {float: left; width: 80%; }
@@ -14,3 +14,8 @@
 .recipe-list { display: none; }
 .recipe-list-row-name { width: 199px; }
 .recipe-list-heading { text-align: left; }
+.heading { color: #0099b8; font-family: 'Arial', sans-serif; font-weight: 600; }
+.navi-button { margin-bottom: 3px; }
+.logo-image { margin-bottom: 24px; margin-left: 19px; }
+button { font-family: Arial,Helvetica,Geneva,sans-serif; font-weight: bold; background: #64BBE6 linear-gradient(#64BBE6 0%, #64BBE6 50%, #008AC8 100%); background-size: 100% auto; border: 0 none; color: #FFFFFF; padding: 4px 10px; text-decoration: none; width: 83px; border-radius: 4px;}
+body { font-family: Arial,Helvetica,Geneva,sans-serif; }

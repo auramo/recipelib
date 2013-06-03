@@ -13,10 +13,10 @@
 </head>
 <body>
 <div class="navi">
-    <img src="/images/pipo_saltcellar.png" width="53" height="80">
+    <img class="logo-image" src="/images/pipo_saltcellar.png" width="53" height="80">
     <ul>
-        <li><button onclick="recipeUiController.switchToEditRecipeView()">Uusi</button></li>
-        <li><button onclick="recipeUiController.start()">Kaikki reseptit</button></li>
+        <li><button class="navi-button" onclick="recipeUiController.switchToEditRecipeView()">Uusi</button></li>
+        <li><button class="navi-button" onclick="recipeUiController.start()">Kaikki reseptit</button></li>
     </ul>
 </div>
 
@@ -26,8 +26,8 @@
         <table>
             <thead>
                 <tr>
-                    <th class="recipe-list-heading">Resepti</th>
-                    <th class="recipe-list-heading">Avainsanat</th>
+                    <th class="recipe-list-heading heading">Resepti</th>
+                    <th class="recipe-list-heading heading">Avainsanat</th>
                 </tr>
             </thead>
             <tbody></tbody>
