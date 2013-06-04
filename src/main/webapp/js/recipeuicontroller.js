@@ -136,11 +136,11 @@ var recipeUiController = (function() {
         var recipeContent = getRecipeContent();
         var recipeObject = { name: recipeName, tags: recipeTags.split(" "), content: recipeContent, originalAddress: originalAddress }
         if (_.isEmpty(recipeId)) {
-            recipeService.createNewRecipe(recipeObject, function() { console.log("Successfully created") })
+            recipeService.createNewRecipe(recipeObject, function(newRecipeId) { switchToShowRecipeView(newRecipeId) })
         }
         else {
             recipeObject.id = recipeId
-            recipeService.saveRecipe(recipeObject, function() { console.log("Successfully saved") })
+            recipeService.saveRecipe(recipeObject, function(savedRecipeId) { switchToShowRecipeView(savedRecipeId) })
         }
     }
 

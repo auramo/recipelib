@@ -19,13 +19,13 @@ var recipeService = (function() {
         },
         createNewRecipe: function(recipe, successCallback) {
             var jsonRecipeObject = JSON.stringify(recipe)
-            ajaxSendData("POST", "", jsonRecipeObject, successCallback, postRecipeFailureCallback)
+            ajaxSendData("POST", "", jsonRecipeObject, parseIdAndCall(successCallback), postRecipeFailureCallback)
         },
         saveRecipe: function(recipe, successCallback) {
             var jsonRecipeObject = JSON.stringify(recipe)
             console.log("savingthis:")
             console.log(jsonRecipeObject)
-            ajaxSendData("PUT", recipe.id, jsonRecipeObject, successCallback, postRecipeFailureCallback)
+            ajaxSendData("PUT", recipe.id, jsonRecipeObject, parseIdAndCall(successCallback), postRecipeFailureCallback)
         },
         deleteRecipe: function(recipeId, successCallback) {
             console.log("deleting this:")
@@ -80,11 +80,20 @@ var recipeService = (function() {
         });
     }
 
-    function postRecipeFailureCallback(jqXHR) {
-        errorService.showError("Kauppalistan lähettäminen epäonnistui", jqXHR.responseText);
+    function parseIdAndCall(idCallback) {
+        return function(response) {
+            console.log("response")
+            console.log(response)
+            //var msg = JSON.parse(response)
+            idCallback(response.id)
+        }
     }
 
-    function fetchRecipeFailureCallback(jqXHR) {
-        errorService.showError("Kauppalistan hakeminen epäonnistui", jqXHR.responseText);
+    function postRecipeFailureCallback(jqXHR, status) {
+        errorService.showError("Kauppalistan lähettäminen epäonnistui", jqXHR.status + " " + status);
+    }
+
+    function fetchRecipeFailureCallback(jqXHR, status) {
+        errorService.showError("Kauppalistan hakeminen epäonnistui", jqXHR.status + " " + status);
     }
 })();

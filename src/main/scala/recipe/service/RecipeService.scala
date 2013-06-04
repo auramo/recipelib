@@ -28,7 +28,7 @@ class RecipeService(val userDao: UserDao, val recipeDao: RecipeDao) {
     recipeDao.findRecipe(id)
   }
 
-  def saveRecipe(authUser: AuthenticatedUser, recipe: Recipe) {
+  def saveRecipe(authUser: AuthenticatedUser, recipe: Recipe): String = {
     getStoredUser(authUser) match {
       case Some(User(id, email, recipeLibraries)) => {
         if (recipe.id.isDefined) checkAccess(authUser, recipe.id.get) //Storing existing recipe

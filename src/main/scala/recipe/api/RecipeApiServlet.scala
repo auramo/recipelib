@@ -41,7 +41,6 @@ class RecipeApiServlet(recipeService: RecipeService) extends RecipelibStack {
     logger.info("POST request")
     logger.info(request.body)
     parseAndSaveRecipe
-    ok
   }
 
 
@@ -50,7 +49,6 @@ class RecipeApiServlet(recipeService: RecipeService) extends RecipelibStack {
     logger.info("PUT request with id: " + id)
     logger.info(request.body)
     parseAndSaveRecipe
-    ok
   }
 
   delete("/:id") {
@@ -60,9 +58,10 @@ class RecipeApiServlet(recipeService: RecipeService) extends RecipelibStack {
     ok
   }
 
-  private def parseAndSaveRecipe {
+  private def parseAndSaveRecipe : String = {
     val parsedRecipe = read[Recipe](request.body)
-    recipeService.saveRecipe(getUser, parsedRecipe)
+    val id = recipeService.saveRecipe(getUser, parsedRecipe)
+    write(ResponseWithId(true, id))
   }
 
   private def getUser = {
@@ -78,6 +77,7 @@ class RecipeApiServlet(recipeService: RecipeService) extends RecipelibStack {
 
   private def ok = write(Response())
 
-  case class Response(ok: Boolean = true, message: Option[String] = None)
-
 }
+case class ResponseWithId(ok: Boolean = true, id: String)
+case class Response(ok: Boolean = true, message: Option[String] = None)
+
