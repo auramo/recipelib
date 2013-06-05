@@ -2,10 +2,7 @@ var recipeService = (function() {
     return {
         getRecipes: function(callback) {
             function fetchRecipeCallback(data) {
-                console.log("before parsing")
                 var parsed = JSON.parse(data)
-                console.log("parsed")
-                console.log(parsed)
                 callback(parsed);
             }
             ajaxGet("" , fetchRecipeCallback, fetchRecipeFailureCallback)
@@ -23,12 +20,9 @@ var recipeService = (function() {
         },
         saveRecipe: function(recipe, successCallback) {
             var jsonRecipeObject = JSON.stringify(recipe)
-            console.log("savingthis:")
-            console.log(jsonRecipeObject)
             ajaxSendData("PUT", recipe.id, jsonRecipeObject, parseIdAndCall(successCallback), postRecipeFailureCallback)
         },
         deleteRecipe: function(recipeId, successCallback) {
-            console.log("deleting this:")
             ajaxSendData("DELETE", recipeId, "", successCallback, postRecipeFailureCallback)
         }
     }
@@ -82,9 +76,6 @@ var recipeService = (function() {
 
     function parseIdAndCall(idCallback) {
         return function(response) {
-            console.log("response")
-            console.log(response)
-            //var msg = JSON.parse(response)
             idCallback(response.id)
         }
     }

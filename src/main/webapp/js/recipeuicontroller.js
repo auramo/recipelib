@@ -63,7 +63,6 @@ var recipeUiController = (function() {
 
     function switchToEditRecipeView(recipeId) {
         if (recipeId) {
-            console.log("Switching to edit view with id: " + recipeId)
             recipeService.getRecipe(recipeId, fillEditRecipeFields)
             $(".save-button").removeAttr("disabled")
             $(".delete-button").removeAttr("disabled")
@@ -97,7 +96,6 @@ var recipeUiController = (function() {
 
     function start() {
         recipeService.getRecipes(function(result) {
-            console.log(result)
             cachedRecipes = result.recipes
             if (_.isEmpty(result.recipes)) {
                 switchToEditRecipeView()
@@ -148,7 +146,7 @@ var recipeUiController = (function() {
     function deleteRecipe() {
         var recipeId = recipeIdEditField().val()
         if (!_.isEmpty(recipeId)) {
-            recipeService.deleteRecipe(recipeId, function() { console.log("Successfully deleted"); start() })
+            recipeService.deleteRecipe(recipeId, function() { start() })
         }
     }
 
