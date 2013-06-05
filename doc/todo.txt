@@ -1,5 +1,6 @@
 * Linkki show-näkymässä a hreffiksi
 * käyttäjän meiliosoite näkyviin nurkkaan jotta tietää kenen reseptilibrary kyseessä
 * Back/formard -napit toimimaan
+* Tulostusnappi show-näkymään
 
 
