@@ -54,6 +54,7 @@ var recipeUiController = (function() {
 
     function switchToShowRecipeView(recipeId) {
         recipeService.getRecipe(recipeId, fillShowRecipeFields)
+        $('.edit-button').unbind('click')
         $('.edit-button').click(function() { switchToEditRecipeView(recipeId)} )
         $('.show-recipe').show()
         $('.recipe-list').hide()
