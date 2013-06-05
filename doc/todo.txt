@@ -2,5 +2,6 @@
 * käyttäjän meiliosoite näkyviin nurkkaan jotta tietää kenen reseptilibrary kyseessä
 * Back/formard -napit toimimaan
 * Tulostusnappi show-näkymään
+* Avainsanoihin se stackoverflow-mainen korostus
 
 
