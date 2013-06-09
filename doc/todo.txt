@@ -3,5 +3,6 @@
 * Back/formard -napit toimimaan
 * Tulostusnappi show-näkymään
 * Avainsanoihin se stackoverflow-mainen korostus
+* Delete-nappiin undo tai ajastin
 
 
