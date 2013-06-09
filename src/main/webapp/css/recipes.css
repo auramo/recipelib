@@ -23,8 +23,8 @@
 .navi-button { margin-bottom: 6px; }
 .header-image { margin-bottom: 24px; margin-left: 11px; margin-top: 11px; }
 button { font-family: Arial,Helvetica,Geneva,sans-serif; font-weight: bold; background: #64BBE6 linear-gradient(#64BBE6 0%, #64BBE6 50%, #008AC8 100%); background: #64BBE6 -webkit-linear-gradient(#64BBE6 0%, #64BBE6 50%, #008AC8 100%); background-size: 100% auto; border: 0 none; color: #FFFFFF; padding: 4px 10px; text-decoration: none; width: 83px; border-radius: 4px; box-shadow: 4px 4px 4px #888;}
-button:disabled { background: #64BBE6 linear-gradient(#5A5C5C 0%, #A0A2A4 50%, #E1E3E4 100%); }
-button:hover:enabled { background: #64BBE6 linear-gradient(#498DAF 0%, #306884 50%, #1D4355 100%);  }
+button:disabled { background: #64BBE6 linear-gradient(#5A5C5C 0%, #A0A2A4 50%, #E1E3E4 100%); background: #64BBE6 -webkit-linear-gradient(#5A5C5C 0%, #A0A2A4 50%, #E1E3E4 100%); }
+button:hover:enabled { background: #64BBE6 linear-gradient(#498DAF 0%, #306884 50%, #1D4355 100%); background: #64BBE6 -webkit-linear-gradient(#498DAF 0%, #306884 50%, #1D4355 100%);  }
 button:active { box-shadow: none; }
 body { font-family: Arial,Helvetica,Geneva,sans-serif; }
 input[type=text] { border-radius: 3px 3px 3px 3px; box-shadow: inset 1px 1px 1px #e3e3e3; border: 1px solid #e2e1e1; font: 1em Arial, Helvetica, Geneva, sans-serif; }
