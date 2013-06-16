@@ -48,7 +48,7 @@ var recipeUiController = (function() {
     function fillShowRecipeFields(recipe) {
         $('.recipe-name-show').html(recipe.name)
         $('.recipe-tags-show').html(splitTags(recipe))
-        $('.recipe-original-address-show').html(recipe.originalAddress)
+        $('.recipe-original-address-show').attr("href", recipe.originalAddress)
         $('.recipe-content-show').html(recipe.content)
     }
 
