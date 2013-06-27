@@ -1,3 +1,4 @@
+* Autosave
 * Ajax-pylpyrät datan lataukseen, nyt näyttää tyhjää pitkään
 * Linkki show-näkymässä a hreffiksi
 * käyttäjän meiliosoite näkyviin nurkkaan jotta tietää kenen reseptilibrary kyseessä
