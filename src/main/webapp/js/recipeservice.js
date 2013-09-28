@@ -35,17 +35,9 @@ var recipeService = (function() {
             contentType: 'application/json',
             dataType: "json",
             success: function(data){
-                console.log("success")
-                console.log("data")
-                console.log(data)
                 successCallback(data)
             },
             error:function(jqXHR, status, msg){
-                console.log("Eror occurred. Status:")
-                console.log(jqXHR.status)
-                console.log(status)
-                console.log("Response contents")
-                console.log(jqXHR.responseText)
                 if (jqXHR.status == 401) document.location.reload();
                 else failureCallback(jqXHR, status, msg);
             }
@@ -57,17 +49,9 @@ var recipeService = (function() {
             url: "/recipeapi/" + path,
             type: "get",
             success: function(data){
-                console.log("success")
-                console.log("data")
-                console.log(data)
                 successCallback(data)
             },
             error: function(jqXHR, status, msg){
-                console.log("Eror occurred. Status:")
-                console.log(jqXHR.status)
-                console.log(status)
-                console.log("Response contents")
-                console.log(jqXHR.responseText)
                 if (jqXHR.status == 401) document.location.reload();
                 else failureCallback(jqXHR, status, msg);
             }

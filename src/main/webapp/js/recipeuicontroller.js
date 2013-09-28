@@ -55,7 +55,7 @@ var recipeUiController = (function() {
     function switchToShowRecipeView(recipeId) {
         recipeService.getRecipe(recipeId, fillShowRecipeFields)
         $('.edit-button').unbind('click')
-        $('.edit-button').click(function() { switchToEditRecipeView(recipeId)} )
+        $('.edit-button').click(function() { switchToView('show_recipe', 'edit_recipe', recipeId); } )
         $('.show-recipe').show()
         $('.recipe-list').hide()
         $('.new-recipe').hide()
@@ -83,6 +83,23 @@ var recipeUiController = (function() {
         var buttonEnabled = recipeNameEntered.and(recipeContentEntered)//.and(recipeTagsEntered)
         buttonEnabled.not().onValue($(".save-button"), "attr", "disabled")
         Bacon.UI.textFieldValue($('.search-recipes')).debounce(400).onValue(search)
+
+	window.onpopstate = function(event) {
+	    if (event.state !== null) {
+		goToNextView(event.state);
+	    }
+	};
+    }
+
+    function goToNextView(state) {
+	var switchTable = 
+	    { 
+		list_recipes: function() { switchToRecipeListView(cachedRecipes); },
+		edit_recipe: function() { switchToEditRecipeView(state.id); },
+		show_recipe: function() { switchToShowRecipeView(state.id); }
+	    } 
+	var switchFunc = switchTable[state.page];
+	if (switchFunc) switchFunc();
     }
 
     function search(searchString) {
@@ -105,11 +122,16 @@ var recipeUiController = (function() {
         });
     }
 
+    function switchToView(currentPageId, nextPageId, recipeId) {
+	history.pushState({page: currentPageId}, null, null);
+	goToNextView({page: nextPageId, id: recipeId});
+    } 
+
     function switchToRecipeListView(recipes) {
         function recipeListRow(recipe) {
             return '<tr class="recipe-list-row" id="recipe-' +
                 recipe.id +
-                '"><td class="recipe-list-row-name"><a href="#" onclick="recipeUiController.switchToShowRecipeView(\'' +
+                '"><td class="recipe-list-row-name"><a href="#" onclick="recipeUiController.switchToView(\'list_recipes\', \'show_recipe\', \'' +
                 recipe.id +
                 '\')">' +
                 recipe.name +
@@ -154,6 +176,7 @@ var recipeUiController = (function() {
         switchToEditRecipeView: switchToEditRecipeView,
         switchToRecipeListView: switchToRecipeListView,
         switchToShowRecipeView: switchToShowRecipeView,
+	switchToView: switchToView,
         saveRecipe: saveRecipe,
         deleteRecipe: deleteRecipe,
         initEvents: initEvents,
