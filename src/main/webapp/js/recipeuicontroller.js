@@ -80,7 +80,7 @@ var recipeUiController = (function() {
         function nonEmpty(x) { return x.length > 0 && x !== '<br>' }
         var recipeNameEntered = Bacon.UI.textFieldValue(recipeNameEditField()).map(nonEmpty)
         var recipeContentEntered = recipientContentValue().map(nonEmpty)
-        var buttonEnabled = recipeNameEntered.and(recipeContentEntered)//.and(recipeTagsEntered)
+        var buttonEnabled = recipeNameEntered.and(recipeContentEntered)
         buttonEnabled.not().onValue($(".save-button"), "attr", "disabled")
         Bacon.UI.textFieldValue($('.search-recipes')).debounce(400).onValue(search)
 
@@ -133,7 +133,7 @@ var recipeUiController = (function() {
                 recipe.id +
                 '"><td class="recipe-list-row-name"><a href="#" onclick="recipeUiController.switchToView(\'list_recipes\', \'show_recipe\', \'' +
                 recipe.id +
-                '\')">' +
+                '\'); return false;">' +
                 recipe.name +
                 '</a></td><td>' +
                 _(recipe.tags).join(" ") +
