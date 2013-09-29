@@ -30,7 +30,27 @@ var recipeUiController = (function() {
         return _(recipe.tags).join(" ")
     }
 
+    function fillShowRecipeFields(recipe) {
+        $('.recipe-name-show').html(recipe.name)
+        $('.recipe-tags-show').html(splitTags(recipe))
+        $('.recipe-original-address-show').attr("href", recipe.originalAddress)
+        $('.recipe-content-show').html(recipe.content)
+        $('.loader').hide()
+        $('.show-recipe').show()
+    }
+
+    function switchToShowRecipeView(recipeId) {
+        recipeService.getRecipe(recipeId, fillShowRecipeFields)
+        $('.edit-button').unbind('click')
+        $('.edit-button').click(function() { switchToView('show_recipe', 'edit_recipe', recipeId); } )
+        $('.recipe-list').hide()
+        $('.new-recipe').hide()
+        $('.loader').show()
+    }
+
     function fillEditRecipeFields(recipe) {
+        $('.loader').hide()
+        $('.new-recipe').show()
         recipeIdEditField().val(recipe.id)
         recipeNameEditField().val(recipe.name)
         recipeTagsEditField().val(splitTags(recipe))
@@ -38,23 +58,9 @@ var recipeUiController = (function() {
         recipeContentEditField().setContent(recipe.content)
     }
 
-    function fillShowRecipeFields(recipe) {
-        $('.recipe-name-show').html(recipe.name)
-        $('.recipe-tags-show').html(splitTags(recipe))
-        $('.recipe-original-address-show').attr("href", recipe.originalAddress)
-        $('.recipe-content-show').html(recipe.content)
-    }
-
-    function switchToShowRecipeView(recipeId) {
-        recipeService.getRecipe(recipeId, fillShowRecipeFields)
-        $('.edit-button').unbind('click')
-        $('.edit-button').click(function() { switchToView('show_recipe', 'edit_recipe', recipeId); } )
-        $('.show-recipe').show()
-        $('.recipe-list').hide()
-        $('.new-recipe').hide()
-    }
-
     function switchToEditRecipeView(recipeId) {
+        hideAllViews()
+        $('.loader').show()
         if (recipeId) {
             recipeService.getRecipe(recipeId, fillEditRecipeFields)
             $(".save-button").removeAttr("disabled")
@@ -64,9 +70,6 @@ var recipeUiController = (function() {
             $(".save-button").attr("disabled", "disabled")
             $(".delete-button").attr("disabled", "disabled")
         }
-        $('.new-recipe').show()
-        $('.recipe-list').hide()
-        $('.show-recipe').hide()
     }
 
     function initEvents() {
@@ -76,22 +79,22 @@ var recipeUiController = (function() {
         buttonEnabled.not().onValue($(".save-button"), "attr", "disabled")
         Bacon.UI.textFieldValue($('.search-recipes')).debounce(400).onValue(search)
 
-	window.onpopstate = function(event) {
-	    if (event.state !== null) {
-		goToNextView(event.state);
-	    }
-	};
+        window.onpopstate = function(event) {
+            if (event.state !== null) {
+                goToNextView(event.state);
+            }
+        };
     }
 
     function goToNextView(state) {
-	var switchTable = 
-	    { 
-		list_recipes: function() { switchToRecipeListView(cachedRecipes); },
-		edit_recipe: function() { switchToEditRecipeView(state.id); },
-		show_recipe: function() { switchToShowRecipeView(state.id); }
-	    } 
-	var switchFunc = switchTable[state.page];
-	if (switchFunc) switchFunc();
+        var switchTable =
+            {
+                list_recipes: function() { switchToRecipeListView(cachedRecipes); },
+                edit_recipe: function() { if (state.id) switchToEditRecipeView(state.id); },
+                show_recipe: function() { if (state.id) switchToShowRecipeView(state.id); }
+            }
+        var switchFunc = switchTable[state.page];
+        if (switchFunc) switchFunc();
     }
 
     function search(searchString) {
@@ -103,7 +106,16 @@ var recipeUiController = (function() {
         rows.filter(function() { return _.contains(found, this.id) }).show()
     }
 
+    function hideAllViews() {
+        $('.loader').hide()
+        $('.new-recipe').hide()
+        $('.recipe-list').hide()
+        $('.show-recipe').hide()
+    }
+
     function start() {
+        hideAllViews()
+        $('.loader').show()
         recipeService.getRecipes(function(result) {
             cachedRecipes = result.recipes
             if (_.isEmpty(result.recipes)) {
@@ -115,8 +127,8 @@ var recipeUiController = (function() {
     }
 
     function switchToView(currentPageId, nextPageId, recipeId) {
-	history.pushState({page: currentPageId}, null, null);
-	goToNextView({page: nextPageId, id: recipeId});
+        history.pushState({page: currentPageId}, null, null);
+        goToNextView({page: nextPageId, id: recipeId});
     } 
 
     function switchToRecipeListView(recipes) {
@@ -135,6 +147,7 @@ var recipeUiController = (function() {
         function getRecipeListHtml() {
             return _(recipes).map(function(recipe) { return recipeListRow(recipe); }).reduce(function (r1, r2) { return r1 + r2 })
         }
+        $('.loader').hide()
         $('.new-recipe').hide()
         $('.show-recipe').hide()
         $('.recipe-list').show()
@@ -168,7 +181,7 @@ var recipeUiController = (function() {
         switchToEditRecipeView: switchToEditRecipeView,
         switchToRecipeListView: switchToRecipeListView,
         switchToShowRecipeView: switchToShowRecipeView,
-	switchToView: switchToView,
+	    switchToView: switchToView,
         saveRecipe: saveRecipe,
         deleteRecipe: deleteRecipe,
         initEvents: initEvents,
