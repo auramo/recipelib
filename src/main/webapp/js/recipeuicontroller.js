@@ -22,13 +22,6 @@ var recipeUiController = (function() {
         return nicEditors.findEditor('recipe-content')
     }
 
-    function recipientContentValue() {
-        function value() {
-            return nicEditors.findEditor('recipe-content').getContent()
-        }
-        return $('.nicEdit-main').asEventStream('keyup').map(value).log().toProperty(value())
-    }
-
     function getRecipeContent() {
         return recipeContentEditField().getContent()
     }
@@ -79,8 +72,7 @@ var recipeUiController = (function() {
     function initEvents() {
         function nonEmpty(x) { return x.length > 0 && x !== '<br>' }
         var recipeNameEntered = Bacon.UI.textFieldValue(recipeNameEditField()).map(nonEmpty)
-        var recipeContentEntered = recipientContentValue().map(nonEmpty)
-        var buttonEnabled = recipeNameEntered.and(recipeContentEntered)
+        var buttonEnabled = recipeNameEntered
         buttonEnabled.not().onValue($(".save-button"), "attr", "disabled")
         Bacon.UI.textFieldValue($('.search-recipes')).debounce(400).onValue(search)
 
