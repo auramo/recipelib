@@ -9,7 +9,7 @@ object MongoConnectionCreator {
 
   private def getConnectionParams: ConnectionParams = {
     val url = Properties.envOrNone("MONGOHQ_URL")
-    val regex = """mongodb://(\w+):(\w+)@([\w|\.]+):(\d+)/(\w+)""".r
+    val regex = """mongodb://(\w+):([\w|-]+)@([\w|\.]+):(\d+)/(\w+)""".r
     url match {
       case Some(regex(u, p, host, port, dbName)) =>
         ConnectionParams(host, port.toInt, dbName, u, p)
