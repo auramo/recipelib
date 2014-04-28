@@ -114,6 +114,7 @@ var recipeUiController = (function() {
     }
 
     function start() {
+        initHashChangeStream()
         hideAllViews()
         $('.loader').show()
         recipeService.getRecipes(function(result) {
@@ -124,6 +125,40 @@ var recipeUiController = (function() {
                 switchToRecipeListView(result.recipes)
             }
         });
+    }
+
+    function initHashChangeStream() {
+        //Change hash programmatically with:
+        //window.location.hash = "some=value&andsome=othervalue";
+        //http://stackoverflow.com/questions/6174821/how-to-trigger-different-functions-on-hash-change-based-on-hash-value-with-jquer
+
+        var hashChanges = Bacon.fromBinder(function(sink) {
+            $(window).on('hashchange', function() { sink(getParams())});
+            return $.noop
+        });
+        hashChanges.onValue(function(x) { console.log("hashchangestream onValue", x)})
+
+        function getParams() {
+            var hashParameters = {}
+            var newParameters = getParameters(event.target.location.hash.substring(1))
+            $.each(newParameters, function(key, value) {
+                if(hashParameters[key] !== value) $(window).trigger(key + "-change")
+                hashParameters[key] = value;
+            })
+            return hashParameters
+        }
+
+        function getParameters(paramString) {
+            //taken from http://stackoverflow.com/questions/4197591/parsing-url-hash-fragment-identifier-with-javascript/4198132#4198132
+            var space = /\+/g
+            var keyValRegex = /([^&;=]+)=?([^&;]*)/g
+            var decode = function (str) { return decodeURIComponent(str.replace(space, " ")) }
+            var keyVal
+            var params = {}
+            while (keyVal = keyValRegex.exec(paramString))
+                params[decode(keyVal[1])] = decode(keyVal[2])
+            return params
+        }
     }
 
     function switchToView(currentPageId, nextPageId, recipeId) {
