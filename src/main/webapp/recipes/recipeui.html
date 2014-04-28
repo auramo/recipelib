@@ -19,8 +19,12 @@
 </div>
 <div class="navi">
     <ul>
-        <li><button class="navi-button" onclick="recipeUiController.switchToEditRecipeView()">Uusi</button></li>
-        <li><button class="navi-button" onclick="recipeUiController.start()">Kaikki reseptit</button></li>
+        <li>
+            <form class="navi-button-form" action="#pageId=newView" method="get"><input type="submit" class="navi-button" value="Uusi"></form>
+        </li>
+        <li>
+            <form class="navi-button-form" action="#pageId=mainView" method="get"><input type="submit" class="navi-button" value="Kaikki reseptit"></form>
+        </li>
     </ul>
 </div>
 
@@ -40,7 +44,9 @@
     </div>
     <div class="show-recipe">
         <div class="recipe-showfields">
-            <div class="recipe-data-row"><span class="recipe-name-show heading"></span><button class="edit-button" value="Muokkaa">Muokkaa</button></div>
+            <div class="recipe-data-row"><span class="recipe-name-show heading"></span>
+                <form class="edit-button-form" action="#" method="get"><input type="submit" class="edit-button" value="Muokkaa"></form>
+            </div>
             <div class="recipe-data-row"><label class="heading">Avainsanat:</label><span class="recipe-tags-show recipe-shortfield"></span></div>
             <div class="recipe-data-row"><a class="heading recipe-original-address-show">Alkuperäinen osoite</a></div>
         </div>

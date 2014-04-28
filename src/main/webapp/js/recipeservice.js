@@ -65,10 +65,10 @@ var recipeService = (function() {
     }
 
     function postRecipeFailureCallback(jqXHR, status) {
-        errorService.showError("Kauppalistan lähettäminen epäonnistui", jqXHR.status + " " + status);
+        errorService.showError("Reseptin lähettäminen epäonnistui", jqXHR.status + " " + status);
     }
 
     function fetchRecipeFailureCallback(jqXHR, status) {
-        errorService.showError("Kauppalistan hakeminen epäonnistui", jqXHR.status + " " + status);
+        errorService.showError("Reseptilistan hakeminen epäonnistui", jqXHR.status + " " + status);
     }
 })();

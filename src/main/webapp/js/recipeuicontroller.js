@@ -41,8 +41,7 @@ var recipeUiController = (function() {
 
     function switchToShowRecipeView(recipeId) {
         recipeService.getRecipe(recipeId, fillShowRecipeFields)
-        $('.edit-button').unbind('click')
-        $('.edit-button').click(function() { switchToView('show_recipe', 'edit_recipe', recipeId); } )
+        $('.edit-button-form').attr('action', '#pageId=editRecipeView&recipeId=' + recipeId);
         $('.recipe-list').hide()
         $('.new-recipe').hide()
         $('.loader').show()
@@ -78,12 +77,6 @@ var recipeUiController = (function() {
         var buttonEnabled = recipeNameEntered
         buttonEnabled.not().onValue($(".save-button"), "attr", "disabled")
         Bacon.UI.textFieldValue($('.search-recipes')).debounce(400).onValue(search)
-
-        window.onpopstate = function(event) {
-            if (event.state !== null) {
-                goToNextView(event.state);
-            }
-        };
     }
 
     function goToNextView(state) {
@@ -116,8 +109,42 @@ var recipeUiController = (function() {
     function start() {
         initHashChangeStream()
         hideAllViews()
+        navigateTo('mainView')
+        showMainView()
+    }
+
+    function navigateTo(pageId, params) {
+        var hash = "pageId=" + pageId// + " value&andsome=othervalue";
+        var paramString = _.reduce(params, function(result, val, key) {
+            result += "&" + key + "=" + val
+            return result;
+        }, "");
+        hash += paramString
+        window.location.hash = hash
+    }
+
+    var naviFunctions = {
+        'mainView': showMainView,
+        'newView': showNewView,
+        'editRecipeView': showEditRecipeView,
+        'showRecipeView': showRecipeView
+    }
+
+    function showRecipeView(params) {
+        switchToShowRecipeView(params.recipeId)
+    }
+
+    function showEditRecipeView(params) {
+        switchToEditRecipeView(params.recipeId)
+    }
+
+    function showNewView() {
+        switchToEditRecipeView()
+    }
+
+    function showMainView() {
         $('.loader').show()
-        recipeService.getRecipes(function(result) {
+        recipeService.getRecipes(function (result) {
             cachedRecipes = result.recipes
             if (_.isEmpty(result.recipes)) {
                 switchToEditRecipeView()
@@ -125,6 +152,11 @@ var recipeUiController = (function() {
                 switchToRecipeListView(result.recipes)
             }
         });
+    }
+
+    function hashChangeReactor(params) {
+        var naviFunction = naviFunctions[params.pageId]
+        if (naviFunction) naviFunction(params)
     }
 
     function initHashChangeStream() {
@@ -136,7 +168,7 @@ var recipeUiController = (function() {
             $(window).on('hashchange', function() { sink(getParams())});
             return $.noop
         });
-        hashChanges.onValue(function(x) { console.log("hashchangestream onValue", x)})
+        hashChanges.onValue(hashChangeReactor)
 
         function getParams() {
             var hashParameters = {}
@@ -162,7 +194,6 @@ var recipeUiController = (function() {
     }
 
     function switchToView(currentPageId, nextPageId, recipeId) {
-        history.pushState({page: currentPageId}, null, null);
         goToNextView({page: nextPageId, id: recipeId});
     } 
 
@@ -170,9 +201,7 @@ var recipeUiController = (function() {
         function recipeListRow(recipe) {
             return '<tr class="recipe-list-row" id="recipe-' +
                 recipe.id +
-                '"><td class="recipe-list-row-name"><a href="#" onclick="recipeUiController.switchToView(\'list_recipes\', \'show_recipe\', \'' +
-                recipe.id +
-                '\'); return false;">' +
+                '"><td class="recipe-list-row-name"><a href="#pageId=showRecipeView&recipeId=' + recipe.id + '">' +
                 recipe.name +
                 '</a></td><td>' +
                 _(recipe.tags).join(" ") +
@@ -197,18 +226,22 @@ var recipeUiController = (function() {
         var recipeContent = getRecipeContent();
         var recipeObject = { name: recipeName, tags: recipeTags.split(" "), content: recipeContent, originalAddress: originalAddress }
         if (_.isEmpty(recipeId)) {
-            recipeService.createNewRecipe(recipeObject, function(newRecipeId) { switchToShowRecipeView(newRecipeId) })
+            recipeService.createNewRecipe(recipeObject, afterSave)
         }
         else {
             recipeObject.id = recipeId
-            recipeService.saveRecipe(recipeObject, function(savedRecipeId) { switchToShowRecipeView(savedRecipeId) })
+            recipeService.saveRecipe(recipeObject, afterSave)
+        }
+        function afterSave(savedId) {
+            switchToShowRecipeView(savedId)
+            navigateTo('showRecipeView', {recipeId: savedId})
         }
     }
 
     function deleteRecipe() {
         var recipeId = recipeIdEditField().val()
         if (!_.isEmpty(recipeId)) {
-            recipeService.deleteRecipe(recipeId, function() { start() })
+            recipeService.deleteRecipe(recipeId, function() { start(); navigateTo('mainView') })
         }
     }
 
