@@ -79,17 +79,6 @@ var recipeUiController = (function() {
         Bacon.UI.textFieldValue($('.search-recipes')).debounce(400).onValue(search)
     }
 
-    function goToNextView(state) {
-        var switchTable =
-            {
-                list_recipes: function() { switchToRecipeListView(cachedRecipes); },
-                edit_recipe: function() { if (state.id) switchToEditRecipeView(state.id); },
-                show_recipe: function() { if (state.id) switchToShowRecipeView(state.id); }
-            }
-        var switchFunc = switchTable[state.page];
-        if (switchFunc) switchFunc();
-    }
-
     function search(searchString) {
         searchString = searchString.toLowerCase()
         function matchRecipe(recipe) { return _.contains(recipe.name.toLowerCase(), searchString) || _.contains(recipe.tags, searchString) }
@@ -193,9 +182,6 @@ var recipeUiController = (function() {
         }
     }
 
-    function switchToView(currentPageId, nextPageId, recipeId) {
-        goToNextView({page: nextPageId, id: recipeId});
-    } 
 
     function switchToRecipeListView(recipes) {
         function recipeListRow(recipe) {
@@ -249,7 +235,6 @@ var recipeUiController = (function() {
         switchToEditRecipeView: switchToEditRecipeView,
         switchToRecipeListView: switchToRecipeListView,
         switchToShowRecipeView: switchToShowRecipeView,
-	    switchToView: switchToView,
         saveRecipe: saveRecipe,
         deleteRecipe: deleteRecipe,
         initEvents: initEvents,
