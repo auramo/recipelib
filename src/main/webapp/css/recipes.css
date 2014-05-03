@@ -17,7 +17,7 @@
 .recipe-data-row .recipe-shortfield { float: right; display: inline-block; width: 300px; }
 .recipe-name-show { font-size: 1.3em; }
 .recipe-content-show { margin-bottom: 40px; }
-.recipe-list { display: none; }
+.recipe-list { display: none; margin-bottom: 50px; }
 .recipe-list-row-name { width: 199px; }
 .recipe-list-heading { text-align: left; }
 .navi-button-form { display: inline-block; margin: 0; }
