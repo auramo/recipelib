@@ -201,6 +201,7 @@ var recipeUiController = (function() {
         $('.new-recipe').hide()
         $('.show-recipe').hide()
         $('.recipe-list').show()
+        $('.search-recipes').val('')
         $('.recipe-list tbody').html(getRecipeListHtml())
     }
 
