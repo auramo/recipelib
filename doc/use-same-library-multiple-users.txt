@@ -1,4 +1,0 @@
-No explicit feature yet. This hack into prod DB does the trick:
-
-db.users.update( { _id: "https://www.google.com/accounts/o8/id?id=AItOawnkItkO1m5e5VBpWZxS7QAkPML_DQAPWkk" }, { $set: { "recipeLibraries": [ "51b22260e4b0eb6a19b72c82" ] } })  
-
