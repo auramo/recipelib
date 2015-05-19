@@ -22,6 +22,7 @@ class UserDao {
       val coll = getUserCollection(mongoClient)
       val newValues = MongoDBObject(
         "_id" -> user.id,
+        "passwordHash" -> user.passwordHash,
         "email" -> user.email,
         "recipeLibraries" -> user.recipeLibraries)
       coll.save(newValues)
@@ -34,9 +35,9 @@ class UserDao {
 
   private def convertToUser(res: DBObject): Some[User] = {
     val id = res.getAs[String]("_id").get
-    val email = res.getAs[String]("email").get
-      val recipeLibrariesRaw: MongoDBList = res.getAs[MongoDBList]("recipeLibraries").get
-      val recipeLibraries: List[String] = recipeLibrariesRaw.collect { case l: String => l }.toList
-    Some(User(id, email, recipeLibraries))
+    val passwordHash = res.getAs[String]("passwordHash").get
+    val recipeLibrariesRaw: MongoDBList = res.getAs[MongoDBList]("recipeLibraries").get
+    val recipeLibraries: List[String] = recipeLibrariesRaw.collect { case l: String => l }.toList
+    Some(User(id, passwordHash, null, recipeLibraries))
   }
 }

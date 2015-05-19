@@ -1,16 +1,15 @@
 package recipe.api
 
-import recipe.{Recipe, Recipes, RecipelibStack}
-import recipe.service.RecipeService
 import org.json4s._
 import org.json4s.native.Serialization
 import org.json4s.native.Serialization.{read, write}
-import recipe.auth.AuthenticatedUser
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.scalatra._
+import org.slf4j.{Logger, LoggerFactory}
+import recipe.auth.User
+import recipe.service.RecipeService
+import recipe.{Recipe, Recipes}
 
-
-class RecipeApiServlet(recipeService: RecipeService) extends RecipelibStack {
+class RecipeApiServlet(recipeService: RecipeService) extends ScalatraServlet {
   implicit val formats = Serialization.formats(NoTypeHints)
   val logger: Logger = LoggerFactory.getLogger(getClass)
 
@@ -65,7 +64,7 @@ class RecipeApiServlet(recipeService: RecipeService) extends RecipelibStack {
   }
 
   private def getUser = {
-    request.getSession.getAttribute("authenticated-user").asInstanceOf[AuthenticatedUser]
+    request.getSession.getAttribute("authenticated-user").asInstanceOf[User]
   }
 
   private val errorLogger: PartialFunction[Throwable, Throwable] = {
