@@ -2,6 +2,8 @@ import sbt._
 import Keys._
 import org.scalatra.sbt._
 import org.scalatra.sbt.PluginKeys._
+import com.typesafe.sbt.SbtNativePackager.autoImport._
+import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 
 object RecipelibBuild extends Build {
   val Organization = "auramo"
@@ -32,6 +34,6 @@ object RecipelibBuild extends Build {
         "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "compile;container;provided;test" artifacts (Artifact("javax.servlet", "jar", "jar"))
       )
     )
-  )
+  ).enablePlugins(JavaAppPackaging)
 }
 
