@@ -17,6 +17,7 @@ lazy val root = (project in file(".")).
     name := "recipelib",
     version := "0.2",
     scalaVersion := "2.11.6",
+    mainClass in (Compile) := Some("JettyLauncher"),
     libraryDependencies += scalatra,
     libraryDependencies += scalatraAuth,
     libraryDependencies += mongo,
