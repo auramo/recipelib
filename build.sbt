@@ -8,9 +8,7 @@ val json4sJackson = "org.json4s" %% "json4s-jackson" % "3.2.11"
 val jettylib = "org.eclipse.jetty" % "jetty-webapp" % "8.1.8.v20121106" % "compile"
 val servletStuff = "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "compile;provided;test" artifacts (Artifact("javax.servlet", "jar", "jar"))
 
-jetty()
-
-enablePlugins(JavaAppPackaging)
+enablePlugins(JettyPlugin, JavaAppPackaging)
 
 lazy val root = (project in file(".")).
   settings(
