@@ -1,5 +1,6 @@
 package recipe.repository
 
+import com.mongodb.client.{MongoClient, MongoCollection}
 import recipe.db.AutoCloseControl.using
 import org.bson.Document
 import org.bson.types.ObjectId
@@ -7,7 +8,7 @@ import com.mongodb.client.model.Filters
 
 import scala.collection.JavaConverters._
 import recipe.{Recipe, RecipeLibrary}
-import recipe.db.MongoConnectionCreator.createMongoConnection
+import recipe.db.MongoConnectionCreator.{createMongoConnection, dbName}
 
 class RecipeRepository {
   def convertToRecipes(docs: List[Document]): List[Recipe] =
@@ -22,7 +23,7 @@ class RecipeRepository {
 
   def listRecipes(recipeLibraryId: String): List[Recipe] = {
     using(createMongoConnection) { mongoClient =>
-      val coll = mongoClient.getDatabase("recipelib").getCollection("recipes")
+      val coll = getRecipeCollection(mongoClient)
       val result = coll.find(new Document("recipeLibraryId", new Document("$eq", recipeLibraryId)))
       return convertToRecipes(result.asScala.toList)
     }
@@ -40,7 +41,7 @@ class RecipeRepository {
 
   def findRecipe(id: String): Option[Recipe] = {
     using(createMongoConnection) { mongoClient =>
-      val coll = mongoClient.getDatabase("recipelib").getCollection("recipes")
+      val coll = getRecipeCollection(mongoClient)
       val result = coll.find(new Document("_id", new Document("$eq", new ObjectId(id))))
       val resultList = result.asScala.toList
       if (resultList.length > 0)
@@ -52,7 +53,7 @@ class RecipeRepository {
 
   def saveRecipe(recipe: Recipe): String = {
     using(createMongoConnection) { mongoClient =>
-      val coll = mongoClient.getDatabase("recipelib").getCollection("recipes")
+      val coll = getRecipeCollection(mongoClient)
       val doc = new Document("name", recipe.name)
         .append("tags", recipe.tags.asJava)
         .append("content", recipe.content.get)
@@ -70,14 +71,14 @@ class RecipeRepository {
 
   def deleteRecipe (id: String) = {
     using(createMongoConnection) { mongoClient =>
-      val coll = mongoClient.getDatabase("recipelib").getCollection("recipes")
+      val coll = getRecipeCollection(mongoClient)
       coll.deleteOne(Filters.eq("_id", new ObjectId(id)))
     }
   }
 
   def saveRecipeLibrary(recipeLibrary: RecipeLibrary): String = {
     using(createMongoConnection) { mongoClient =>
-      val coll = mongoClient.getDatabase("recipelib").getCollection("recipeLibraries")
+      val coll = getRecipeLibraryCollection(mongoClient)
       val doc = new Document("name", recipeLibrary.name)
       if (recipeLibrary.id.isDefined) {
         coll.replaceOne(
@@ -97,4 +98,13 @@ class RecipeRepository {
       case None => false
     }
   }
+
+  private def getRecipeCollection (mongoClient: MongoClient): MongoCollection[Document] = {
+    mongoClient.getDatabase(dbName).getCollection("recipes")
+  }
+
+  private def getRecipeLibraryCollection (mongoClient: MongoClient): MongoCollection[Document] = {
+    mongoClient.getDatabase(dbName).getCollection("recipeLibraries")
+  }
+
 }

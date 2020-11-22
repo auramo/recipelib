@@ -1,12 +1,13 @@
 package recipe.repository
 
+import com.mongodb.client.{MongoClient, MongoCollection}
 import recipe.auth.User
 import recipe.db.AutoCloseControl.using
 import com.mongodb.client.model.Filters
 import org.bson.Document
 
 import scala.collection.JavaConverters._
-import recipe.db.MongoConnectionCreator.createMongoConnection
+import recipe.db.MongoConnectionCreator.{createMongoConnection, dbName}
 
 class UserRepository {
   def convertToUser(found: Document) = {
@@ -19,7 +20,8 @@ class UserRepository {
 
   def find(id: String): Option[User] = {
     using(createMongoConnection) { mongoClient =>
-      val coll = mongoClient.getDatabase("recipelib").getCollection("users")
+      val coll = getUserCollection(mongoClient)
+      println( "### finding user", id)
       val result = coll.find(new Document("_id", new Document("$eq", id)))
       val it = result.iterator()
       if (it.hasNext()) return Some(convertToUser(it.next()))
@@ -29,7 +31,7 @@ class UserRepository {
 
   def update(user: User): Unit = {
     using(createMongoConnection) { mongoClient =>
-      val coll = mongoClient.getDatabase("recipelib").getCollection("users")
+      val coll = getUserCollection(mongoClient)
       val doc = new Document("passwordHash", user.passwordHash)
         .append("email", user.email)
         .append("recipeLibraries", user.recipeLibraries)
@@ -38,12 +40,15 @@ class UserRepository {
   }
   def insert(user: User): Unit = {
     using(createMongoConnection) { mongoClient =>
-      val coll = mongoClient.getDatabase("recipelib").getCollection("users")
+      val coll = getUserCollection(mongoClient)
       val doc = new Document("_id", user.id)
         .append("passwordHash", user.passwordHash)
         .append("email", user.email)
         .append("recipeLibraries", user.recipeLibraries)
       coll.insertOne(doc)
     }
+  }
+  private def getUserCollection (mongoClient: MongoClient): MongoCollection[Document] = {
+    mongoClient.getDatabase(dbName).getCollection("users")
   }
 }
