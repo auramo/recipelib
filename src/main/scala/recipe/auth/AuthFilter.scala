@@ -4,10 +4,10 @@ import org.scalatra.ScalatraFilter
 import org.scalatra.auth.strategy.BasicAuthStrategy.BasicAuthRequest
 import org.slf4j.{Logger, LoggerFactory}
 import recipe.crypto.PasswordHash
-import recipe.dao.UserDao
+import recipe.repository.UserRepository
 
 
-class AuthFilter(userDao: UserDao) extends ScalatraFilter {
+class AuthFilter(userRepository: UserRepository) extends ScalatraFilter {
   val logger: Logger = LoggerFactory.getLogger(getClass)
 
   before("/recipes/*") {
@@ -48,7 +48,8 @@ class AuthFilter(userDao: UserDao) extends ScalatraFilter {
   }
 
   protected def validateLogin(userId: String, password: String): Option[User] = {
-    val userOpt: Option[User] = userDao.find(userId)
+    //val userOpt: Option[User] = userDao.find(userId)
+    val userOpt: Option[User] = userRepository.find(userId)
     userOpt.flatMap { user =>
       if (PasswordHash.validatePassword(password, user.passwordHash))
         Some(user)
